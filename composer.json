@@ -1,0 +1,93 @@
+{
+  "name": "roots/bedrock",
+  "type": "project",
+  "license": "MIT",
+  "description": "WordPress boilerplate with Composer, easier configuration, and an improved folder structure",
+  "homepage": "https://roots.io/bedrock/",
+  "authors": [
+    {
+      "name": "Scott Walkinshaw",
+      "email": "scott.walkinshaw@gmail.com",
+      "homepage": "https://github.com/swalkinshaw"
+    },
+    {
+      "name": "Ben Word",
+      "email": "ben@benword.com",
+      "homepage": "https://github.com/retlehs"
+    }
+  ],
+  "keywords": [
+    "bedrock", "composer", "roots", "wordpress", "wp", "wp-config"
+  ],
+  "support": {
+    "issues": "https://github.com/roots/bedrock/issues",
+    "forum": "https://discourse.roots.io/category/bedrock"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+    }
+  ],
+  "replace": {
+    "php-http/message-factory": "*"
+  },
+  "require": {
+    "php": ">=7.4",
+    "composer/installers": "^2.2",
+    "vlucas/phpdotenv": "^5.5",
+    "oscarotero/env": "^2.1",
+    "roots/bedrock-autoloader": "^1.0",
+    "roots/bedrock-disallow-indexing": "^2.0",
+    "roots/wordpress": "6.4.3",
+    "roots/wp-config": "1.0.0",
+    "roots/wp-password-bcrypt": "1.1.0",
+    "wpackagist-plugin/wps-hide-login": "*",
+    "wpackagist-plugin/amazon-s3-and-cloudfront": "*",
+    "wpackagist-plugin/elementor": "*",
+    "wpackagist-plugin/header-footer-elementor": "*",
+    "wpackagist-plugin/ilmenite-cookie-consent": "*",
+    "wpackagist-plugin/userway-accessibility-widget": "*",
+    "wpackagist-plugin/ga-google-analytics": "*",
+    "wpackagist-plugin/query-monitor": "*",
+    "wpackagist-plugin/svg-support": "*",
+    "wpackagist-plugin/make-column-clickable-elementor": "*",
+    "wpackagist-plugin/enable-media-replace": "*",
+    "stayallive/wp-sentry": "^6.26",
+    "wpackagist-plugin/polylang": "*",
+    "wpackagist-plugin/official-mailerlite-sign-up-forms": "*",
+    "wpackagist-plugin/connect-polylang-elementor": "*"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.7.1",
+    "roave/security-advisories": "dev-latest"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "composer/installers": true,
+      "roots/wordpress-core-installer": true,
+      "php-http/discovery": true
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "installer-paths": {
+      "html/wpapp/mu-plugins/{$name}/": ["type:wordpress-muplugin"],
+      "html/wpapp/plugins/{$name}/": ["type:wordpress-plugin"],
+      "html/wpapp/themes/{$name}/": ["type:wordpress-theme"]
+    },
+    "wordpress-install-dir": "html/wp"
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "php -r \"copy('.env.example', '.env');\""
+    ],
+    "test": [
+      "phpcs"
+    ]
+  }
+}

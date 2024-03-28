@@ -1,0 +1,54 @@
+:root {
+	--cleanup-accent-color-1: #f9423a;
+	--cleanup-accent-color-2: #307fe2;
+	--cleanup-neutral-color-1: #444444;
+	--cleanup-neutral-color-2: #767676;
+	--cleanup-neutral-color-3: #ccd0d4;
+	--cleanup-neutral-color-4: #e7e7e7;
+	--cleanup-neutral-color-5: #f7f7f7;
+	--cleanup-logout-icon: url('data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhcyIgZGF0YS1pY29uPSJzaWduLW91dC1hbHQiIGNsYXNzPSJzdmctaW5saW5lLS1mYSBmYS1zaWduLW91dC1hbHQgZmEtdy0xNiIgcm9sZT0iaW1nIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNNDk3IDI3M0wzMjkgNDQxYy0xNSAxNS00MSA0LjUtNDEtMTd2LTk2SDE1MmMtMTMuMyAwLTI0LTEwLjctMjQtMjR2LTk2YzAtMTMuMyAxMC43LTI0IDI0LTI0aDEzNlY4OGMwLTIxLjQgMjUuOS0zMiA0MS0xN2wxNjggMTY4YzkuMyA5LjQgOS4zIDI0LjYgMCAzNHpNMTkyIDQzNnYtNDBjMC02LjYtNS40LTEyLTEyLTEySDk2Yy0xNy43IDAtMzItMTQuMy0zMi0zMlYxNjBjMC0xNy43IDE0LjMtMzIgMzItMzJoODRjNi42IDAgMTItNS40IDEyLTEyVjc2YzAtNi42LTUuNC0xMi0xMi0xMkg5NmMtNTMgMC05NiA0My05NiA5NnYxOTJjMCA1MyA0MyA5NiA5NiA5Nmg4NGM2LjYgMCAxMi01LjQgMTItMTJ6Ij48L3BhdGg+PC9zdmc+');
+}
+
+#wpadminbar .cleanup-important {
+	background: var(--cleanup-accent-color-2);
+}
+
+#wpadminbar .cleanup-important:hover {
+	background: var(--cleanup-accent-color-1);
+}
+
+	#wpadminbar .cleanup-important .ab-item {
+		color: white;
+		font-weight: bold;
+	}
+
+	#wpadminbar .cleanup-important:hover .ab-item, #wpadminbar .cleanup-important .ab-item:hover {
+		color: white !important;
+		background: transparent !important;
+	}
+
+	#wp-toolbar > ul > li#wp-admin-bar-cleanup-logout {
+		background-image: var(--cleanup-logout-icon);
+		background-position: right 6px center;
+		background-repeat: no-repeat;
+		background-size: 16px;
+		padding-right: 20px;
+	}
+
+
+@media screen and (max-width: 782px) {
+
+	#wp-toolbar > ul > li#wp-admin-bar-cleanup-logout {
+		background-image: var(--cleanup-logout-icon);
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 24px;
+		display: block;
+		overflow: hidden;
+		padding: 0;
+		position: relative;
+		text-indent: 44px;
+		width: 44px;
+	}
+	
+}

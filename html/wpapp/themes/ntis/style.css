@@ -1,0 +1,45 @@
+/*
+	Theme Name: Nacionalinė turizmo informacinė sistema
+	Theme URI: https://tip.ntis.lt
+	Description: Nacionalinė turizmo informacinė sistema
+	Author: Petras Pauliūnas
+	Author URI: mailto:petras.pauliunas@gmail.com
+	Version: 1.1
+	Stable tag: 1.0
+	Requires at least: 6.4.2
+	Tested up to: 6.4.2
+	Requires PHP: 8.2
+	License: GNU General Public License v3 or later.
+	License URI: https://www.gnu.org/licenses/gpl-3.0.html
+	Text Domain: sr
+	Tags: flexible-header, custom-colors, custom-menu, custom-logo, featured-images, rtl-language-support, threaded-comments, translation-ready
+*/
+@font-face {
+	font-family: "StabilGrotesk";
+	src: url('assets/fonts/StabilGrotesk/StabilGrotesk-Bold.woff2') format('woff2'),
+		url('assets/fonts/StabilGrotesk/StabilGrotesk-Bold.woff') format('woff');
+	font-display: swap;
+	font-weight:bold;
+	font-style:normal;
+}
+@font-face {
+	font-family: "StabilGrotesk";
+	src: url('assets/fonts/StabilGrotesk/StabilGrotesk-Regular.woff2') format('woff2'),
+		url('assets/fonts/StabilGrotesk/StabilGrotesk-Regular.woff') format('woff');
+	font-display: swap;
+	font-weight:normal;
+	font-style:normal;
+}
+*,
+::after,
+::before {
+	box-sizing: border-box;
+}
+html{scroll-behavior: smooth;}
+body,html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+	font-size:16px;
+	font-family: "StabilGrotesk", sans-serif;
+}

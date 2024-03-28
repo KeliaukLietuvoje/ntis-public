@@ -1,0 +1,133 @@
+:root {
+	--cleanup-accent-color-1: #f9423a;
+	--cleanup-accent-color-2: #307fe2;
+	--cleanup-neutral-color-1: #444444;
+	--cleanup-neutral-color-2: #767676;
+	--cleanup-neutral-color-3: #ccd0d4;
+	--cleanup-neutral-color-4: #e7e7e7;
+	--cleanup-neutral-color-5: #f7f7f7;
+}
+
+.cleanup .columns-2 {
+	display: grid;
+	grid-template-columns: calc(100% - 280px) 280px;
+	width: 100%;
+}
+
+	.cleanup .columns-2 .column-1 {
+		grid-column-start: 1;
+		padding-right: 1rem;
+	}
+
+		.cleanup .columns-2 .column-1 > * {
+			width: 100%;
+		}
+
+	.cleanup .columns-2 .column-2 {
+		grid-column-start: 2;
+	}
+
+.cleanup .help {
+	cursor: help;
+	display: block;
+	font-size: 0.75rem;
+	height: 1.5em;
+	position: absolute; top: 0.75rem; right: 0;
+	width: 1.5em;
+}
+.cleanup .help:before {
+	background: var(--cleanup-neutral-color-2);
+	border-radius: 2em;
+	color: #ffffff;
+	content: '?';
+	display: inline-block;
+	font-style: normal;
+	font-weight: bold;
+	height: 1.5em;
+	line-height: 1.5em;
+	position: absolute; top: 0; left: 0;
+	text-align: center;
+	width: 1.5em;
+}
+.cleanup .help:hover:before {
+	background: var(--cleanup-accent-color-2);
+	z-index: 3;
+}
+
+	.cleanup .help .help_content {
+		background: white;
+		border: 1px solid var(--cleanup-neutral-color-3);
+		box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+		color: var(--cleanup-neutral-color-1);
+		display: none;
+		font-style: normal;
+		line-height: 1.5em;
+		padding: 0.75em;
+		position: absolute; top: 0.75em; right: -0.25em;
+		text-align: left;
+		width: 24em;
+		z-index: 2;
+	}
+	.cleanup .help:hover .help_content { display: block; }
+
+		.cleanup .help:hover .help_content code {
+			font-size: 90% !important;
+			padding: 1px 2px !important;
+		}
+
+.cleanup small code {
+	font-size: 100%;
+}
+
+.cleanup table {
+	border-collapse: collapse;
+	margin: 1.5rem 0 !important;
+}
+
+	.cleanup tr {
+		border-top: 1px solid var(--cleanup-neutral-color-4);
+		border-bottom: 1px solid var(--cleanup-neutral-color-4);
+	}
+	
+	.cleanup tr.cleanup-table-header-row {
+		background: var(--cleanup-neutral-color-5);
+	}
+	
+	.cleanup td {
+		position: relative;
+	}
+	
+	.cleanup .form-table td {
+		padding: 10px;
+	}
+	
+	.cleanup table .cleanup-options-toggle {
+		font-size: 0.75rem;
+		margin: 0.5rem 0;
+	}
+	
+	.cleanup table label {
+		display: inline-block;
+		margin: 0.2rem 1rem 0.2rem 0;
+	}
+
+
+@media screen and (max-width: 782px) {
+
+	.cleanup .columns-2 {
+		display: block;
+	}
+
+		.cleanup .columns-2 .column-1 {
+			display: block;
+			width: 100%;
+		}
+
+
+		.cleanup .columns-2 .column-2 {
+			display: block;
+			width: 100%;
+		}
+
+}
+

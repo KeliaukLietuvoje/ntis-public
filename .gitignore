@@ -1,0 +1,22 @@
+# Application
+html/wpapp/plugins
+html/wpapp/mu-plugins
+html/wpapp/upgrade
+html/wpapp/uploads
+html/wpapp/cache/
+
+# WordPress
+html/wp
+
+# Logs
+*.log
+docker-compose.env
+
+# Dotenv
+.env
+
+# Composer
+/vendor
+
+# WP-CLI
+wp-cli.local.yml

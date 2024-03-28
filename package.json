@@ -1,0 +1,9 @@
+{
+  "name": "tip-public",
+  "version": "1.0.0",
+  "scripts": {
+    "dc:up": "docker-compose -p tip-public up --build -d --force-recreate",
+    "dc:logs": "docker-compose -p tip-public logs -f",
+    "dc:down": "docker-compose -p tip-public down"
+  }
+}

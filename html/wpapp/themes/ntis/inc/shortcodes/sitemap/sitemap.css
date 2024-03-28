@@ -1,0 +1,26 @@
+.sitemap{
+    margin:0;
+    padding: 0;
+    line-height: 38px;
+    list-style-position: inside;
+}
+
+.sitemap a{
+	text-decoration: underline;
+    text-underline-offset: 4px;
+    background-image: linear-gradient(var( --e-global-color-accent ) 0%, var( --e-global-color-accent ) 100%);
+    background-position: 0% 110%;
+    background-repeat: repeat-x;
+    background-size: 0px 0px;
+    transition: color 150ms ease 0s, background-size 150ms ease 0s;
+    padding: 0px 3px;
+    margin: 0px -3px;
+    position: relative;
+	word-break: break-word;
+}
+.sitemap a:hover{
+	text-decoration: none;
+    background-size: 2px 100%;
+    z-index: 1;
+    color: #fff !important;
+}

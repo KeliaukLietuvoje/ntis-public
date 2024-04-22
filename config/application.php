@@ -60,6 +60,7 @@ Config::define('MINIO_BUCKET', env('MINIO_BUCKET'));
 Config::define('MINIO_ACCESSKEY', env('MINIO_ACCESSKEY'));
 Config::define('MINIO_SECRETKEY', env('MINIO_SECRETKEY'));
 Config::define('MINIO_ENDPOINT', env('MINIO_ENDPOINT'));
+Config::define('MINIO_USESSL', env('MINIO_USESSL') == 'true');
 Config::define('BUCKET_URL', env('BUCKET_URL'));
 
 

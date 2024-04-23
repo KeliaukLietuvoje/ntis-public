@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 define('NTIS_THEME_DIR', get_template_directory());
 define('NTIS_THEME_URL', get_template_directory_uri());
 
-define('NTIS_VERSION', '1.0');
+define('NTIS_THEME_VERSION', '1.0');
 
 if (! function_exists('ntis_setup')) {
     /**
@@ -43,13 +43,11 @@ add_filter('wp_sitemaps_add_provider', function ($provider, $name) {
 if (! function_exists('ntis_scripts_styles')) {
     function ntis_scripts_styles()
     {
-        wp_enqueue_style('font-ntis', NTIS_THEME_URL . '/inc/elementor/css/ntis-custom.css', array(), NTIS_VERSION);
-
         wp_enqueue_style(
             'ntis',
             get_template_directory_uri() . '/style.css',
             [],
-            NTIS_VERSION
+            NTIS_THEME_VERSION
         );
     }
 }
@@ -112,7 +110,7 @@ function ntis_tab_shortcode($atts)
     $atts = shortcode_atts(
         array(
             'color' => 'black',
-            'count' => '2023',
+            'count' => '2024',
             'href' => '#',
         ),
         $atts,
@@ -122,66 +120,6 @@ function ntis_tab_shortcode($atts)
 }
 add_shortcode('ntis_tab', 'ntis_tab_shortcode');
 
-
-function is_dir_empty($dir)
-{
-    if (!is_readable($dir)) {
-        return null; // when the directory is unreadable
-    }
-    return (count(glob("$dir/*")) === 0);
-}
-
-// Automatically purge and regenerate the Elementor CSS cache
-add_action('init', 'clear_elementor_cache');
-function clear_elementor_cache()
-{
-    if (is_dir_empty($_SERVER['DOCUMENT_ROOT'] . '/wpapp/uploads/elementor/css')) {
-        if (! did_action('elementor/loaded')) {
-            return;
-        }
-        \Elementor\Plugin::$instance->files_manager->clear_cache();
-    }
-}
-if (!function_exists('ntis_elementor_is_activated')) {
-    function ntis_elementor_is_activated()
-    {
-        if(function_exists('elementor_load_plugin_textdomain')) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
-if (! function_exists('ntis_elementor_is_edit_mode')) {
-    function ntis_elementor_is_edit_mode()
-    {
-        if(!ntis_elementor_is_activated()) {
-            return false;
-        }
-
-        return Elementor\Plugin::$instance->editor->is_edit_mode();
-    }
-}
-if (! function_exists('ntis_elementor_is_preview_mode')) {
-    function ntis_elementor_is_preview_mode()
-    {
-        if(!ntis_elementor_is_activated()) {
-            return false;
-        }
-
-        return Elementor\Plugin::$instance->preview->is_preview_mode();
-    }
-}
-
-if (! function_exists('ntis_elementor_is_preview_page')) {
-    function ntis_elementor_is_preview_page()
-    {
-        return isset($_GET['preview_id']);
-    }
-}
-if(ntis_elementor_is_activated()) {
-    require_once NTIS_THEME_DIR .'/inc/class-elementor.php';
-}
 if(!function_exists('ntis_sitemap')) {
     require_once NTIS_THEME_DIR .'/inc/shortcodes/sitemap/sitemap.php';
 }

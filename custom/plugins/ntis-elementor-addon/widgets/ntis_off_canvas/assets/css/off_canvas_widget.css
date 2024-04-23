@@ -1,7 +1,7 @@
-.offcanvas-content {
+.ntis-off-canvas-content {
     display: none;
     position: fixed;
-    top: 0;
+    top: 0; 
     right: -320px; 
     width: 320px;
     height: 100%;
@@ -9,13 +9,13 @@
     z-index: 1000;
     transition: all 0.3s ease-in-out;
 }
-.offcanvas-open .offcanvas-content {
+.ntis-off-canvas-open .ntis-off-canvas-content {
     display: block;
     right: 0;
     padding: 12px;
     overflow-y: auto;
-}
-.offcanvas-overlay {
+} 
+.ntis-off-canvas-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -25,22 +25,22 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 900;
 }
-body.offcanvas-open {
+body.ntis-off-canvas-open {
     overflow: hidden;
 }
-.offcanvas-open .offcanvas-overlay {
+.ntis-off-canvas-open .ntis-off-canvas-overlay {
     display: block;
 }
-.offcanvas-open .my-icon-wrapper svg {    
+.ntis-off-canvas-open .icon-wrapper svg {    
     height: 20px;
     width: 20px;
 }
-body.offcanvas-open .offcanvas-close{
+body.ntis-off-canvas-open .ntis-off-canvas-close{
     display: flex !important;
     justify-content: flex-end;
     padding: 12px 12px 0px 12px;
 }
-.offcanvas-open,
-.offcanvas-close{    
+.ntis-off-canvas-open,
+.ntis-off-canvas-close{    
     cursor: pointer;
 }

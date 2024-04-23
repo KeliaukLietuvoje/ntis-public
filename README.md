@@ -1,10 +1,10 @@
-# TIP Public
+# NTIS Public
 
 [![License](https://img.shields.io/github/license/KeliaukLietuvoje/ntis-public)](https://github.com/KeliaukLietuvoje/ntis-public/blob/main/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/KeliaukLietuvoje/ntis-public)](https://github.com/KeliaukLietuvoje/ntis-public/issues)
 [![GitHub stars](https://img.shields.io/github/stars/KeliaukLietuvoje/ntis-public)](https://github.com/KeliaukLietuvoje/ntis-public/stargazers)
 
-This repository contains the source code and documentation for the TIP Public, developed by the Keliauk Lietuvoje.
+This repository contains the source code and documentation for the NTIS Public, developed by the Keliauk Lietuvoje.
 
 ## Table of Contents
 
@@ -48,10 +48,7 @@ To get started with the TIP Public, follow the instructions below.
 
 The WEB will be available at `http://localhost`.
 
-2. Login to Wordpress admin panel `http://localhost/skydas`.
-
-    user: ntisAdmin
-    password: 
+2. Install Wordpress.
 
 3. Login to MySQL database via Adminer available at `http://localhost:8888`
 

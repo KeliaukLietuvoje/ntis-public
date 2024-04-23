@@ -66,6 +66,7 @@ services:
       - mariadb
     volumes:
       - ./html/wpapp/themes/ntis:/opt/wordpress/html/wpapp/themes/ntis:rw
+      - ./custom/plugins/ntis-elementor-addon:/opt/wordpress/html/wpapp/plugins/ntis-elementor-addon:rw
     env_file: 
       - ./.env
     ports:

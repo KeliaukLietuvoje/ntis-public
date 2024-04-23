@@ -1,15 +1,15 @@
 jQuery(window).on('elementor/frontend/init', () => {
-  class OffcanvasMenu extends elementorModules.frontend.handlers.Base {
+  class Ntis_Off_Canvas extends elementorModules.frontend.handlers.Base {
     getDefaultSettings() {
       return {
         selectors: {
-          button: '.offcanvas-open',
-          content: '.offcanvas-content',
-          overlay: '.offcanvas-overlay',
-          close: '.offcanvas-close'
+          button: '.ntis-off-canvas-open',
+          content: '.ntis-off-canvas-content',
+          overlay: '.ntis-off-canvas-overlay',
+          close: '.ntis-off-canvas-close'
         }
       };
-    }
+    } 
 
     getDefaultElements() {
       const selectors = this.getSettings('selectors');
@@ -28,15 +28,15 @@ jQuery(window).on('elementor/frontend/init', () => {
     }
 
     openMenu() {
-      document.body.classList.add('offcanvas-open');
+      document.body.classList.add('ntis-off-canvas-open');
     }
       closeMenu() {
-        document.body.classList.remove('offcanvas-open');
+        document.body.classList.remove('ntis-off-canvas-open');
       }
-    }
+    } 
   
-    elementorFrontend.hooks.addAction('frontend/element_ready/ntis-off-canvas.default', ($element) => {
-      elementorFrontend.elementsHandler.addHandler(OffcanvasMenu, {
+    elementorFrontend.hooks.addAction('frontend/element_ready/ntis_off_canvas.default', ($element) => {
+      elementorFrontend.elementsHandler.addHandler(Ntis_Off_Canvas, {
         $element
       });
     });

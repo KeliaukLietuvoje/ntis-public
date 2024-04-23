@@ -9,14 +9,6 @@ RUN composer install --optimize-autoloader --no-dev
 # Stage 2: Final Image. Wordpress version is updated using composer
 FROM wordpress:6.5.2-php8.3-apache
 
-# Enable SSL module
-# RUN a2enmod ssl
-
-# # Copy SSL certificates and configure Apache to use SSL
-# COPY ssl/tip.local.crt /etc/ssl/certs/
-# COPY ssl/tip.local.key /etc/ssl/private/
-# COPY ssl/apache-config.conf /etc/apache2/sites-available/wordpress-ssl.conf
-# RUN a2ensite wordpress-ssl.conf
 
 # Adjust Apache configuration for correct document root and directory path.
 # For more information see https://hub.docker.com/_/wordpress (Static image / updates-via-redeploy)
@@ -47,4 +39,3 @@ RUN chmod -R 755 /opt/wordpress/html/wpapp/ \
     && chown -R www-data:www-data /opt/wordpress/html/wpapp/uploads
 
 EXPOSE 80
-# EXPOSE 443 

@@ -120,6 +120,9 @@ function ntis_tab_shortcode($atts)
 }
 add_shortcode('ntis_tab', 'ntis_tab_shortcode');
 
-if(!function_exists('ntis_sitemap')) {
+if(!class_exists('NTIS_Sitemap')) {
     require_once NTIS_THEME_DIR .'/inc/shortcodes/sitemap/sitemap.php';
+}
+if(!class_exists('NTIS_Contact_Form')) {
+    require_once NTIS_THEME_DIR .'/inc/shortcodes/contact-form/contact-form.php';
 }

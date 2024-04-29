@@ -1,0 +1,175 @@
+.ntis-contact-form {
+    display: grid;
+    gap: 2rem;
+}
+
+.ntis-contact-form .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    width: 100%;
+}
+
+.ntis-contact-form label {
+    color: #535d6c;
+    display: block;
+    font-size: 1em;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.ntis-contact-form input,
+.ntis-contact-form textarea {
+    background-clip: padding-box;
+    background-color: #fff;
+    border: 1px solid #ced6e0;
+    border-radius: 1.125rem;
+    color: #1d2430;
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    height: 3rem;
+    line-height: 1.2;
+    padding: 0.7rem 1rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    width: 100%;
+}
+
+.ntis-contact-form textarea {
+    height: 6rem;
+    font-family: inherit;
+}
+
+.ntis-contact-form button {
+    width: 100%;
+    border: 0;
+    background-color: #C7E6DC;
+    border-radius: 9999px;
+    height: 48px;
+    color: #003C3A;
+    font-size: 1.125rem;
+    transition: background-color .15s ease-in-out, color .15s ease-in-out;
+    cursor: pointer;
+}
+.ntis-contact-form button:hover {
+    background-color: #003C3A;
+    color: #C7E6DC;
+}
+
+.ntis-contact-form input:focus,
+.ntis-contact-form textarea:focus {
+    border-color: #66b0ad;
+    box-shadow: 0 0 0 0.2rem rgba(51, 99, 97, .25);
+    background-color: #fff;
+    color: #1d2430;
+    outline: 0;
+}
+.ntis-contact-form .invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .875em;
+    color: #dc3545;
+}
+.ntis-contact-form .valid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .875em;
+    color: #198754;
+}
+.ntis-contact-form .is-valid~.valid-feedback, 
+.ntis-contact-form .is-valid~.valid-tooltip, 
+.ntis-contact-form.was-validated :valid~.valid-feedback, 
+.ntis-contact-form.was-validated :valid~.valid-tooltip, 
+.ntis-contact-form .is-invalid~.invalid-feedback, 
+.ntis-contact-form .is-invalid~.invalid-tooltip, 
+.ntis-contact-form.was-validated :invalid~.invalid-feedback, 
+.ntis-contact-form.was-validated :invalid~.invalid-tooltip {
+    display: block;
+}
+.ntis-form-check{
+    display:grid;
+    grid-template-columns: 32px auto;
+    min-height: 0.875rem;
+    align-items:center;
+    gap:0.5rem;
+}
+.ntis-form-check-label,
+.ntis-form-label{
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight:500;
+    letter-spacing: 0px;
+    color: #3c434a;
+    margin-bottom:4px;
+    display: block;
+}
+.ntis-form-check-label{
+    font-weight:400;
+}
+label.ntis-form-check-label{
+    margin-bottom:0;
+}
+.ntis-contact-form .ntis-form-check-input{
+    width: 1.5rem;
+    height: 1.5em;
+    border-radius: 0.25em;
+    padding:0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: 1px solid #ced6e0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    margin:0;
+    margin-right:8px;
+    print-color-adjust: exact;
+}
+.ntis-form-check-input.is-invalid, .was-validated .ntis-form-check-input:invalid {
+    border-color: #dc3545;
+}
+.ntis-form-check-input.is-valid, .was-validated .ntis-form-check-input:valid {
+    border-color: #198754;
+}
+.ntis-form-check-input.is-valid:checked, .was-validated .ntis-form-check-input:valid:checked {
+    background-color: #198754;
+}
+.ntis-form-check-input.is-invalid:focus, .was-validated .ntis-form-check-input:invalid:focus {
+    box-shadow: 0px 0px 0px 4px rgb(220 53 69 / 25%);
+}
+.ntis-contact-form .ntis-form-check-input[type=checkbox]:checked{
+    background-color: #003C3A;
+    border-color: #ced6e0;   
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+
+.ntis-form-control.is-valid, .was-validated .ntis-form-control:valid {
+    border-color: #198754;
+}
+.ntis-form-control.is-invalid, .was-validated .ntis-form-control:invalid {
+    border-color: #dc3545;
+}
+.alert{
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .875em;
+    padding: 1rem;
+    border-radius: 0.25em;
+}
+.alert.alert-danger{
+    display:block;
+    color: #dc3545;
+    background:#f8d7da;
+    border: 1px solid #f1aeb5;
+}
+.alert.alert-success{
+    display:block;
+    color: #198754;
+    background:#d1e7dd;
+    border:1px solid #a3cfbb;
+}

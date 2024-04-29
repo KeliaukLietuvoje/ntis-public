@@ -60,8 +60,8 @@ class Ntis_Off_Canvas extends \Elementor\Widget_Base
                 'label' => esc_html__('Menu icon', 'ntis'),
                 'type' => \Elementor\Controls_Manager::ICONS,
                 'default' => [
-                    'value' => 'ntis ntis-menu',
-                    'library' => 'ntis-custom',
+                    'value' => 'ntisico ntisico-menu',
+                    'library' => 'ntisico-custom',
                 ],
             ]
         );
@@ -72,8 +72,8 @@ class Ntis_Off_Canvas extends \Elementor\Widget_Base
                 'label' => __('Close icon', 'ntis'),
                 'type' => \Elementor\Controls_Manager::ICONS,
                 'default' => [
-                    'value' => 'ntis ntis-x',
-                    'library' => 'ntis-custom',
+                    'value' => 'ntisico ntisico-x',
+                    'library' => 'ntisico-custom',
                 ],
             ]
         );

@@ -63,6 +63,7 @@ Config::define('MINIO_ENDPOINT', env('MINIO_ENDPOINT'));
 Config::define('MINIO_USESSL', env('MINIO_USESSL') == 'true');
 Config::define('BUCKET_URL', env('BUCKET_URL'));
 
+Config::define('POSTMARK_API_TOKEN', env('POSTMARK_API_TOKEN'));
 
 /**
  * Custom Content Directory
@@ -144,11 +145,11 @@ header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload'
 header('X-Permitted-Cross-Domain-Policies: none');
 header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
-header("Feature-Policy: geolocation 'none'; midi 'none'; sync-xhr 'none'; accelerometer 'none'; gyroscope 'none'; magnetometer 'none'; camera 'none'; fullscreen 'self'");
+header("Feature-Policy: geolocation 'self' *.ntis.lt; midi 'none'; sync-xhr 'none'; accelerometer 'none'; gyroscope 'none'; magnetometer 'none'; camera 'none'; fullscreen 'self'");
 header('Cross-Origin-Embedder-Policy: unsafe-none; report-to="default"');
 header('Cross-Origin-Resource-Policy: cross-origin');
 if(isset($_SERVER['HTTPS'])  && $_SERVER['HTTPS'] == 'on') {
-    header("Content-Security-Policy: default-src * blob: data:; script-src https: 'unsafe-inline' 'unsafe-eval'; style-src https: 'unsafe-inline'; frame-src 'self' *.biip.lt https://cdn.userway.org/ blob:;");
+    header("Content-Security-Policy: default-src * blob: data:; script-src https: 'unsafe-inline' 'unsafe-eval'; style-src https: 'unsafe-inline'; frame-src 'self' *.ntis.lt *.userway.org blob:;");
 }
 
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';

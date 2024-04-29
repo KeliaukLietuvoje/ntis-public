@@ -7,9 +7,9 @@ jQuery(window).on('elementor/frontend/init', () => {
           content: '.ntis-off-canvas-content',
           overlay: '.ntis-off-canvas-overlay',
           close: '.ntis-off-canvas-close'
-        }
+        },
       };
-    } 
+    }
 
     getDefaultElements() {
       const selectors = this.getSettings('selectors');
@@ -30,14 +30,15 @@ jQuery(window).on('elementor/frontend/init', () => {
     openMenu() {
       document.body.classList.add('ntis-off-canvas-open');
     }
-      closeMenu() {
-        document.body.classList.remove('ntis-off-canvas-open');
-      }
-    } 
-  
-    elementorFrontend.hooks.addAction('frontend/element_ready/ntis_off_canvas.default', ($element) => {
-      elementorFrontend.elementsHandler.addHandler(Ntis_Off_Canvas, {
-        $element
-      });
+    closeMenu() {
+      document.body.classList.remove('ntis-off-canvas-open');
+    }
+  }
+
+  elementorFrontend.hooks.addAction('frontend/element_ready/ntis_off_canvas.default', ($element) => {
+    elementorFrontend.elementsHandler.addHandler(Ntis_Off_Canvas, {
+      $element
     });
+    document.body.classList.add('ntis-off-canvas-enabled');
   });
+});

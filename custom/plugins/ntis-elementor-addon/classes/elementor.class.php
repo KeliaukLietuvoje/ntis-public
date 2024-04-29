@@ -1,4 +1,5 @@
 <?php
+
 class NTIS_Elementor
 {
     public function __construct()
@@ -7,7 +8,7 @@ class NTIS_Elementor
     }
     public function init()
     {
-        
+
         add_action('init', array(&$this,'clear_cache'));
         add_action('elementor/elements/categories_registered', array(&$this, 'add_category' ));
         add_action('elementor/editor/after_enqueue_styles', array(&$this, 'enqueue_scripts_styles'), 99);
@@ -66,12 +67,12 @@ class NTIS_Elementor
     }
     public function elementor_icons($tabs)
     {
-        $tabs['ntis-custom'] = [
-            'name'          => 'ntis-custom',
+        $tabs['ntisico-custom'] = [
+            'name'          => 'ntisico-custom',
             'label'         => esc_html__('NTIS ikonos', 'ntis'),
-            'prefix'        => 'ntis-',
-            'displayPrefix' => 'ntis',
-            'labelIcon'     => 'ntis ntis-globe',
+            'prefix'        => 'ntisico-',
+            'displayPrefix' => 'ntisico',
+            'labelIcon'     => 'ntisico ntisico-globe',
             'ver'           => '1.0.0',
             'fetchJson'     => NTIS_URI . '/assets/js/ntis-custom.json',
             'native'        => true,

@@ -70,6 +70,7 @@
     margin-top: 0.25rem;
     font-size: .875em;
     color: #dc3545;
+    grid-column: span 2;
 }
 .ntis-contact-form .valid-feedback {
     display: none;

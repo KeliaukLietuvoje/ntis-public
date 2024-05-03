@@ -56,6 +56,7 @@
     "wpackagist-plugin/enable-media-replace": "*",
     "stayallive/wp-sentry": "^6.26",
     "wpackagist-plugin/polylang": "*",
+    "wpackagist-plugin/cookiebot": "*",
     "wpackagist-plugin/official-mailerlite-sign-up-forms": "*",
     "wpackagist-plugin/connect-polylang-elementor": "*"
   },

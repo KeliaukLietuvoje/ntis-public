@@ -149,7 +149,7 @@ header("Feature-Policy: geolocation 'self' *.ntis.lt; midi 'none'; sync-xhr 'non
 header('Cross-Origin-Embedder-Policy: unsafe-none; report-to="default"');
 header('Cross-Origin-Resource-Policy: cross-origin');
 if(isset($_SERVER['HTTPS'])  && $_SERVER['HTTPS'] == 'on') {
-    header("Content-Security-Policy: default-src * blob: data:; script-src https: 'unsafe-inline' 'unsafe-eval'; style-src https: 'unsafe-inline'; frame-src 'self' *.ntis.lt *.userway.org blob:;");
+    header("Content-Security-Policy: default-src * https: blob: data:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; frame-src 'self' *.ntis.lt *.userway.org userway.org blob:;");
 }
 
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';

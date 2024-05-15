@@ -7,7 +7,7 @@ COPY composer.json composer.lock ./
 RUN composer install --optimize-autoloader --no-dev
 
 # Stage 2: Final Image. Wordpress version is updated using composer
-FROM wordpress:6.5.2-php8.3-apache
+FROM wordpress:6.5.3-php8.3-apache
 
 
 # Adjust Apache configuration for correct document root and directory path.

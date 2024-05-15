@@ -21,7 +21,7 @@ class NTIS_Postmark
     {
         $url = 'https://api.postmarkapp.com/email/withTemplate';
         $data = array(
-            'From' => 'noreply@ntis.lt',
+            'From' => 'neatsakyti@ntis.lt',
             'To' => $to,
             'TemplateId' => $template_id,
             'TemplateModel' => $template_model
@@ -39,7 +39,7 @@ class NTIS_Postmark
             'redirection' => 5,
             'blocking'    => true,
             'httpversion' => '1.0',
-            'sslverify'   => false 
+            'sslverify'   => false
         );
         $response = wp_remote_post($url, $args);
 

@@ -46,7 +46,7 @@ class NTIS_Contact_Form
             'email' => $email,
             'message' => $message,
         );
-        
+
         if(!class_exists('NTIS_Postmark')) {
             $response = array(
                 'success' => false,
@@ -56,7 +56,7 @@ class NTIS_Contact_Form
         } else {
             $response = NTIS_Postmark::send_email('info@ntis.lt', 35679775, $template_model);
             $response = json_decode($response, true);
-            if(isset($response['ErrorCode'])) {
+            if(isset($response['ErrorCode']) && $response['ErrorCode'] != 0) {
                 $response = array(
                     'success' => false,
                     'console' => $response,
@@ -109,9 +109,9 @@ class NTIS_Contact_Form
             <div class="ntis-form-check">
                 <input type="checkbox" name="bdar" value="yes" class="ntis-form-check-input" id="ntis_bdar_<?php echo self::$id;?>" required/> 
                 <label class="ntis-form-check-label" for="ntis_bdar_<?php echo self::$id;?>">
-                <?php echo sprintf(__('Su UAB „Keliauk Lietuvoje“ <a href="%s">privatumo politika</a> susipažinau ir sutinku, kad mano asmens duomenys būtų tvarkomi užklausos vykdymo tikslais.', 'ntis'), $privacy_policy);?>
+                <?php echo sprintf(__('Su VšĮ „Keliauk Lietuvoje“ <a href="%s">privatumo politika</a> susipažinau ir sutinku, kad mano asmens duomenys būtų tvarkomi užklausos vykdymo tikslais.', 'ntis'), $privacy_policy);?>
                 </label>
-                <div class="invalid-feedback"><?php _e('Prašome įvesti klausimą', 'ntis');?></div>
+                <div class="invalid-feedback"><?php _e('Privalote sutikti su privatumo politika', 'ntis');?></div>
             </div>
             <div>
                 <button type="submit"><?php _e('Pateikti', 'ntis');?></button>

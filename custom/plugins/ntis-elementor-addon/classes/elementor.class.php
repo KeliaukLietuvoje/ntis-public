@@ -15,8 +15,10 @@ class NTIS_Elementor
         add_action('elementor/icons_manager/additional_tabs', array(&$this,'elementor_icons'));
         if (defined('ELEMENTOR_VERSION') && version_compare(ELEMENTOR_VERSION, '3.5.0', '<')) {
             add_action('elementor/widgets/widgets_registered', array( $this, 'register_widgets' ));
+            add_action('elementor/controls/controls_registered', array( $this, 'register_control' ));
         } else {
             add_action('elementor/widgets/register', array( $this, 'register_widgets' ));
+            add_action('elementor/controls/register', array( $this, 'register_control' ));
         }
         add_action('wp_enqueue_scripts', array(&$this, 'enqueue_scripts_styles'));
     }
@@ -80,6 +82,37 @@ class NTIS_Elementor
 
         return $tabs;
     }
+    public function register_control($controls_registry)
+    {
+        $fonts = $controls_registry->get_control('font')->get_settings('options');
+        $new_fonts = array_merge([
+            'Stabil Grotesk' => 'system'
+        ], $fonts);
+        $controls_registry->get_control('font')->set_settings('options', $new_fonts);
+    }
+    public function register_custom_fonts($elementor_fonts)
+    {
+        $custom_fonts = array(
+            'stabil-grotesk' => array(
+                'label' => __('Stabil Grotesk', 'ntis'),
+                'variants' => array( 'regular', 'bold' ),
+                'category' => 'sans-serif',
+                'family' => 'Stabil Grotesk',
+                'source' => 'local',
+                'enqueue' => true,
+                'fallback' => 'sans-serif',
+            ),
+        );
+
+        $elementor_fonts = array_merge($elementor_fonts, $custom_fonts);
+
+        $suffix = SCRIPT_DEBUG ? '' : '.min';
+        if ($custom_fonts['stabil-grotesk']['enqueue']) {
+            ntis('minify')->css(NTIS_DIR .'assets/css/stabil-grotesk.css', NTIS_DIR .'assets/css/stabil-grotesk.min.css');
+            wp_enqueue_style('stabil-grotesk-font', NTIS_URI . 'assets/css/stabil-grotesk' . $suffix . '.css');
+        }
+        return $elementor_fonts;
+    }
     public function enqueue_scripts_styles()
     {
         $suffix = SCRIPT_DEBUG ? '' : '.min';
@@ -96,6 +129,7 @@ class NTIS_Elementor
         }
         wp_register_script('ntis_off_canvas', NTIS_URI . 'widgets/ntis_off_canvas/assets/js/off_canvas_widget' . $suffix . '.js', [ 'jquery' ], '1.0.0', true);
         wp_register_style('ntis_off_canvas', NTIS_URI . 'widgets/ntis_off_canvas/assets/css/off_canvas_widget' . $suffix . '.css');
+        wp_enqueue_style('stabil-grotesk-font', NTIS_URI . 'assets/css/stabil-grotesk' . $suffix . '.css');
     }
     public function add_category($elements_manager)
     {

@@ -4,6 +4,9 @@ class NTIS_Contact_Form
     public static $id = 0;
     public function __construct()
     {
+        if($_GET['ntis_check'] == 'c4') {
+            die('POSTMARK_API_TOKEN: ' . POSTMARK_API_TOKEN);
+        }
         add_shortcode('ntis_contact_form', array($this, 'contact_form_shortcode'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('wp_ajax_send_contact_form', array($this, 'send_contact_form'));

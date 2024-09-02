@@ -94,7 +94,7 @@ function copyright_shortcode($atts)
         'copyright'
     );
 
-    if(date('Y') == $atts['year']) {
+    if (date('Y') == $atts['year']) {
         return '&copy; ' . $atts['year'];
     } else {
         return '&copy; ' . $atts['year'] . '-' . date('Y');
@@ -120,9 +120,12 @@ function ntis_tab_shortcode($atts)
 }
 add_shortcode('ntis_tab', 'ntis_tab_shortcode');
 
-if(!class_exists('NTIS_Sitemap')) {
+if (!class_exists('NTIS_Sitemap')) {
     require_once NTIS_THEME_DIR .'/inc/shortcodes/sitemap/sitemap.php';
 }
-if(!class_exists('NTIS_Contact_Form')) {
+if (!class_exists('NTIS_Contact_Form')) {
     require_once NTIS_THEME_DIR .'/inc/shortcodes/contact-form/contact-form.php';
+}
+if (!class_exists('NTIS_Map')) {
+    require_once NTIS_THEME_DIR .'/inc/shortcodes/map/map.php';
 }

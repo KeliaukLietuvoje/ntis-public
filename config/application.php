@@ -63,6 +63,7 @@ Config::define('MINIO_ENDPOINT', env('MINIO_ENDPOINT'));
 Config::define('MINIO_USESSL', env('MINIO_USESSL') == 'true');
 Config::define('BUCKET_URL', env('BUCKET_URL'));
 Config::define('POSTMARK_API_TOKEN', env('POSTMARK_API_TOKEN'));
+Config::define('NTIS_API_URL', env('NTIS_API_URL'));
 
 /**
  * Custom Content Directory
@@ -147,7 +148,7 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header("Feature-Policy: geolocation 'self'; midi 'none'; sync-xhr 'none'; accelerometer 'none'; gyroscope 'none'; magnetometer 'none'; camera 'none'; fullscreen 'self'");
 header('Cross-Origin-Embedder-Policy: unsafe-none; report-to="default"');
 header('Cross-Origin-Resource-Policy: cross-origin');
-if(isset($_SERVER['HTTPS'])  && $_SERVER['HTTPS'] == 'on') {
+if (isset($_SERVER['HTTPS'])  && $_SERVER['HTTPS'] == 'on') {
     header("Content-Security-Policy: default-src * https: blob: data:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; frame-src 'self' consentcdn.cookiebot.com consent.cookiebot.com *.ntis.lt *.userway.org userway.org blob:; worker-src 'self' blob:;");
 }
 

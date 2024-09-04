@@ -391,9 +391,10 @@ function cleanup_remove_head_tags()
 function cleanup_remove_howdy($wp_admin_bar)
 {
     $my_account = $wp_admin_bar->get_node('my-account');
+    $title = isset($my_account->title) ? $my_account->title : '';
     $wp_admin_bar->add_node(array(
         'id' => 'my-account',
-        'title' => substr($my_account->title, strpos($my_account->title, '<span class="display-name">')),
+        'title' => substr($title, strpos($title, '<span class="display-name">')),
     ));
 }
 

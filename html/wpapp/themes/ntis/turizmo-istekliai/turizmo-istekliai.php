@@ -14,12 +14,26 @@ class NTIS_Tourism_Resources
     }
     public function turizmo_istekliai_rewrite_rule()
     {
-        $page_id = $this->get_id_by_slug('turizmo-istekliai');
-        add_rewrite_rule(
-            '^turizmo-istekliai/([^/]*)/id:([0-9]+)/?$',
-            'index.php?page_id='.$page_id.'&object=$matches[1]&object_id=$matches[2]',
-            'top'
-        );
+        if (function_exists('pll_current_language')) {
+            $current_lang = pll_current_language();
+        } else {
+            $current_lang = 'lt';
+        }
+        if($current_lang == 'lt') {
+            $page_id = $this->get_id_by_slug('turizmo-istekliai');
+            add_rewrite_rule(
+                '^turizmo-istekliai/([^/]*)/id:([0-9]+)/?$',
+                'index.php?page_id='.$page_id.'&object=$matches[1]&object_id=$matches[2]',
+                'top'
+            );
+        }else{
+            $page_id = $this->get_id_by_slug('tourism-resources');
+            add_rewrite_rule(
+                '^tourism-resources/([^/]*)/id:([0-9]+)/?$',
+                'index.php?page_id='.$page_id.'&object=$matches[1]&object_id=$matches[2]',
+                'top'
+            );
+        }
 
     }
     public static function fix_url($url)

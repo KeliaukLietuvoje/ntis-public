@@ -129,3 +129,6 @@ if (!class_exists('NTIS_Contact_Form')) {
 if (!class_exists('NTIS_Map')) {
     require_once NTIS_THEME_DIR .'/inc/shortcodes/map/map.php';
 }
+if (!class_exists('NTIS_Tourism_Resources')) {
+    require_once NTIS_THEME_DIR.'/turizmo-istekliai/turizmo-istekliai.php';
+}

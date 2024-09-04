@@ -432,7 +432,7 @@ try {
                             <div class="tic-place__detail__desc">
                                 <?php echo $item->isPaid == true ? __('Mokama', 'ntis') : __('Nemokama', 'ntis');?></div>
                         </div>
-                        <a href="<?php echo get_the_permalink();?><?php echo sanitize_title($title);?>/<?php echo $item->id;?>"
+                        <a href="<?php echo get_the_permalink();?><?php echo sanitize_title($title);?>/id:<?php echo $item->id;?>/"
                             class="item-title"><?php echo $title;?></a>
                         <?php if (!empty($item->categories)) { ?>
                         <div class="tic-place__categories">

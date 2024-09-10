@@ -17,12 +17,26 @@ function not_found()
     exit();
 }
 
+function request_error($error_code = 400, $error_title = '', $error_message = '')
+{
+    get_header();?>
+    <div id="content" class="error-message site-content-<?php echo $error_code;?>" role="main">
+    <h1 class="title"><?php echo !empty($error_title) ? $error_title : __('Informacijos nėra', 'ntis'); ?></h1>
+    <div class="content">
+        <p>
+            <?php echo !empty($error_message) ? $error_message : __('Blogai suformuota užklausa arba rezultatų nėra.', 'ntis'); ?>
+        </p>
+    </div><!-- .page-content -->
+</div><!-- #content -->
+<?php
+    get_footer();
+    exit();
+}
+
 
 try {
     $current_lang = (function_exists('pll_current_language')) ? pll_current_language() : 'lt';
     $object_id = get_query_var('object_id');
-
-
 
     if (!empty($object_id)) {
         $rest_url = NTIS_API_URL.'/public/forms/'.$object_id;
@@ -297,7 +311,7 @@ try {
                 get_footer();
             }
         } else {
-            not_found();
+            request_error(200, __('Informacijos nėra', 'ntis'), __('Užklausa iš API negrąžino duomenų', 'ntis'));
         }
     } else {
 
@@ -504,7 +518,6 @@ try {
                 </ul>
                 <?php echo NTIS_Tourism_Resources::loop_pagination($paged, $max_num_pages);?>
                 <?php } else { ?>
-
                     <?php _e('Pagal pateiktus filtro kriterijus paieška rezultatų negrąžino.', 'ntis');?>
                 <?php } ?>
 
@@ -515,6 +528,8 @@ try {
     <?php
                         get_footer();
             }
+        } else {
+            request_error(200, __('Informacijos nėra', 'ntis'), __('Užklausa iš API negrąžino duomenų', 'ntis'));
         }
     }
 

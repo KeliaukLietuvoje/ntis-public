@@ -69,20 +69,25 @@ try {
                 }
 
                 $season_labels = ['SUMMER' => __('Vasara', 'ntis'), 'AUTUMN' => __('Ruduo', 'ntis'), 'WINTER' => __('Žiema', 'ntis'), 'SPRING' => __('Pavasaris', 'ntis')];
-                if (count($item['seasons']) == 4) {
+                if (isset($item['seasons']) && count($item['seasons']) == 4) {
                     $season_label = __('Visus metus', 'ntis');
                 } else {
                     $season_label = '';
-                    foreach ($item['seasons'] as $season) {
-                        $season_label .= $season_labels[$season].', ';
+                    if (isset($item['seasons'])) {
+                        foreach ($item['seasons'] as $season) {
+                            $season_label .= $season_labels[$season].', ';
+                        }
+                        $season_label = rtrim($season_label, ', ');
                     }
-                    $season_label = rtrim($season_label, ', ');
                 }
                 ?>
                 <div class="tic-place">
                     <div class="tic-place__hero" style="background-image:url(<?php echo $main_photo;?>);">
                         <div class="tic-place__hero-container">
                         <div class="tic-place__hero-column">
+                            <div class="tic-place__hero__back">
+                                <a href="<?php echo get_the_permalink();?>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#003c3a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> <?php _e('Grįžti atgal', 'ntis');?></a>
+                            </div>
                             <h1><?php echo $title;?></h1>
                             <?php if (!empty($item['categories'])) { ?>
                             <div class="tic-place__categories">
@@ -158,7 +163,7 @@ try {
                                 <polyline points="12 6 12 12 16.5 12" />
                                 </svg>
                             <div class="tic-place__detail__desc"><span><?php _e('Lankymo trukmė', 'ntis');?></span>
-                            <?php if ($item['visitDuration']->isAllDay) { ?>
+                            <?php if (isset($item['visitDuration']->isAllDay)) { ?>
                                 <?php _e('Visa diena', 'ntis');?>
                                 <?php } else { ?>
                             <?php echo $item['visitDuration']->from;?> - <?php echo $item['visitDuration']->to;?> <?php _e('val.', 'ntis');?><?php } ?></div>
@@ -262,8 +267,31 @@ try {
                         </div>
                         <?php } ?>
                         <div class="tic-place__desc">
-                            <?php echo $desc;?>
+                            <?php echo wpautop($desc);?>
                         </div>
+                            
+                        <?php if (!empty($item['photos'])) {?>
+                            <div class="swiper tic-swiper">
+                            <div class="tic-place__pic swiper-wrapper">
+                                <?php foreach ($item['photos'] as $photo) {
+                                    $photo_name = $photo->name ?? '';
+                                    $photo_author = $photo->author ?? ''; ?>
+                                    <div class="swiper-slide"><a href="<?php echo esc_attr($photo->url);?>" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="6d1b18c" data-elementor-lightbox-title="<?php echo !empty($photo_name)?esc_attr($photo_name).', ':'';?><?php echo isset($photo_author) ? '©'.esc_attr($photo_author) : '';?>">
+                                <img
+                                src="<?php echo esc_attr($photo->url);?>" alt="<?php echo !empty($photo_name)?esc_attr($photo_name).', ':'';?> <?php echo isset($photo_author) ? '©'.esc_attr($photo_author) : '';?>" />
+                                </a></div>
+                                <?php } ?>
+                            </div>
+                            <div class="swiper-bottom">
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-wrap">
+                                    <div class="swiper-button-prev btn btn-dark btn-outlined"></div>
+                                    <div class="swiper-button-next btn btn-dark btn-outlined"></div>
+                                </div>
+                            </div>
+                            </div>
+                        <?php } ?>
+
                         </div>
                         <div class="tic-place__column">
                             <?php if (!empty($url)) {?>
@@ -275,16 +303,7 @@ try {
                             </svg>
                         </a>
                         <?php } ?>
-                        <?php if (!empty($item['photos'])) {?>
-                        <div class="tic-place__pic">
-                            <?php foreach ($item['photos'] as $photo) {?>
-                                <a href="<?php echo esc_attr($photo->url);?>" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="6d1b18c" data-elementor-lightbox-title="<?php echo esc_attr($photo->name);?> <?php echo isset($photo->author) ? ', ©'.esc_attr($photo->author) : '';?>">
-                            <img
-                            src="<?php echo esc_attr($photo->url);?>" alt="<?php echo esc_attr($photo->name);?> <?php echo isset($photo->author) ? ', ©'.esc_attr($photo->author) : '';?>" />
-                            </a>
-                            <?php } ?>
-                        </div>
-                        <?php } ?>
+                        
 
                         <?php if (!empty($item['geom'])) {
                             $reader = new EWKBReader();
@@ -334,7 +353,7 @@ try {
             if (!empty($filter_title)) {
 
                 if ($current_lang == 'lt') {
-                    $params['query[nameLt]'] = sanitize_text_field($filter_title);
+                    $params['query[nameLt][$ilike]'] = '%'.sanitize_text_field($filter_title).'%';
                 } else {
                     $params['query[nameEn]'] = sanitize_text_field($filter_title);
                 }

@@ -38,6 +38,10 @@ class NTIS_Tourism_Resources
             wp_enqueue_style('maplibre-styles', '//unpkg.com/maplibre-gl@'.$maplibre_js_ver.'/dist/maplibre-gl.css', [], $maplibre_js_ver, 'all');
             wp_enqueue_script('maplibre-js', '//unpkg.com/maplibre-gl@'.$maplibre_css_ver.'/dist/maplibre-gl.js', ['jquery'], $maplibre_css_ver, true);
             wp_enqueue_style('turizmo-istekliai-styles', NTIS_THEME_URL . '/turizmo-istekliai/turizmo-istekliai.css', array(), '', 'all');
+            if (!wp_script_is('swiper', 'enqueued')) {
+                wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', ['jquery'], '11', true);
+                wp_enqueue_style('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', [], '11', 'all');
+            }
             wp_enqueue_script('turizmo-istekliai', NTIS_THEME_URL . '/turizmo-istekliai/turizmo-istekliai.js', ['jquery'], '1.1.5', true);
             wp_localize_script(
                 'turizmo-istekliai',

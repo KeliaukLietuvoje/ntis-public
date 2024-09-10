@@ -128,6 +128,20 @@
     });
     
 
+    var swiper = new Swiper('.tic-swiper', {
+        cssMode: true,
+        slidesPerView: 3,
+        spaceBetween: 16,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+    });
+
     const ntis_object_map = {
         init: function () {
             if (!document.getElementById('tic-place__map') || !maplibregl) return;

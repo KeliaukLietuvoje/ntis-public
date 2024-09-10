@@ -17,12 +17,26 @@ function not_found()
     exit();
 }
 
+function request_error($error_code = 400, $error_title = '', $error_message = '')
+{
+    get_header();?>
+    <div id="content" class="error-message site-content-<?php echo $error_code;?>" role="main">
+    <h1 class="title"><?php echo !empty($error_title) ? $error_title : __('Informacijos nėra', 'ntis'); ?></h1>
+    <div class="content">
+        <p>
+            <?php echo !empty($error_message) ? $error_message : __('Blogai suformuota užklausa arba rezultatų nėra.', 'ntis'); ?>
+        </p>
+    </div><!-- .page-content -->
+</div><!-- #content -->
+<?php
+    get_footer();
+    exit();
+}
+
 
 try {
     $current_lang = (function_exists('pll_current_language')) ? pll_current_language() : 'lt';
     $object_id = get_query_var('object_id');
-
-
 
     if (!empty($object_id)) {
         $rest_url = NTIS_API_URL.'/public/forms/'.$object_id;
@@ -55,20 +69,25 @@ try {
                 }
 
                 $season_labels = ['SUMMER' => __('Vasara', 'ntis'), 'AUTUMN' => __('Ruduo', 'ntis'), 'WINTER' => __('Žiema', 'ntis'), 'SPRING' => __('Pavasaris', 'ntis')];
-                if (count($item['seasons']) == 4) {
+                if (isset($item['seasons']) && count($item['seasons']) == 4) {
                     $season_label = __('Visus metus', 'ntis');
                 } else {
                     $season_label = '';
-                    foreach ($item['seasons'] as $season) {
-                        $season_label .= $season_labels[$season].', ';
+                    if (isset($item['seasons'])) {
+                        foreach ($item['seasons'] as $season) {
+                            $season_label .= $season_labels[$season].', ';
+                        }
+                        $season_label = rtrim($season_label, ', ');
                     }
-                    $season_label = rtrim($season_label, ', ');
                 }
                 ?>
                 <div class="tic-place">
                     <div class="tic-place__hero" style="background-image:url(<?php echo $main_photo;?>);">
                         <div class="tic-place__hero-container">
                         <div class="tic-place__hero-column">
+                            <div class="tic-place__hero__back">
+                                <a href="<?php echo get_the_permalink();?>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#003c3a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> <?php _e('Grįžti atgal', 'ntis');?></a>
+                            </div>
                             <h1><?php echo $title;?></h1>
                             <?php if (!empty($item['categories'])) { ?>
                             <div class="tic-place__categories">
@@ -144,7 +163,7 @@ try {
                                 <polyline points="12 6 12 12 16.5 12" />
                                 </svg>
                             <div class="tic-place__detail__desc"><span><?php _e('Lankymo trukmė', 'ntis');?></span>
-                            <?php if ($item['visitDuration']->isAllDay) { ?>
+                            <?php if (isset($item['visitDuration']->isAllDay)) { ?>
                                 <?php _e('Visa diena', 'ntis');?>
                                 <?php } else { ?>
                             <?php echo $item['visitDuration']->from;?> - <?php echo $item['visitDuration']->to;?> <?php _e('val.', 'ntis');?><?php } ?></div>
@@ -248,8 +267,31 @@ try {
                         </div>
                         <?php } ?>
                         <div class="tic-place__desc">
-                            <?php echo $desc;?>
+                            <?php echo wpautop($desc);?>
                         </div>
+                            
+                        <?php if (!empty($item['photos'])) {?>
+                            <div class="swiper tic-swiper">
+                            <div class="tic-place__pic swiper-wrapper">
+                                <?php foreach ($item['photos'] as $photo) {
+                                    $photo_name = $photo->name ?? '';
+                                    $photo_author = $photo->author ?? ''; ?>
+                                    <div class="swiper-slide"><a href="<?php echo esc_attr($photo->url);?>" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="6d1b18c" data-elementor-lightbox-title="<?php echo !empty($photo_name)?esc_attr($photo_name).', ':'';?><?php echo isset($photo_author) ? '©'.esc_attr($photo_author) : '';?>">
+                                <img
+                                src="<?php echo esc_attr($photo->url);?>" alt="<?php echo !empty($photo_name)?esc_attr($photo_name).', ':'';?> <?php echo isset($photo_author) ? '©'.esc_attr($photo_author) : '';?>" />
+                                </a></div>
+                                <?php } ?>
+                            </div>
+                            <div class="swiper-bottom">
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-wrap">
+                                    <div class="swiper-button-prev btn btn-dark btn-outlined"></div>
+                                    <div class="swiper-button-next btn btn-dark btn-outlined"></div>
+                                </div>
+                            </div>
+                            </div>
+                        <?php } ?>
+
                         </div>
                         <div class="tic-place__column">
                             <?php if (!empty($url)) {?>
@@ -261,16 +303,7 @@ try {
                             </svg>
                         </a>
                         <?php } ?>
-                        <?php if (!empty($item['photos'])) {?>
-                        <div class="tic-place__pic">
-                            <?php foreach ($item['photos'] as $photo) {?>
-                                <a href="<?php echo esc_attr($photo->url);?>" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="6d1b18c" data-elementor-lightbox-title="<?php echo esc_attr($photo->name);?> <?php echo isset($photo->author) ? ', ©'.esc_attr($photo->author) : '';?>">
-                            <img
-                            src="<?php echo esc_attr($photo->url);?>" alt="<?php echo esc_attr($photo->name);?> <?php echo isset($photo->author) ? ', ©'.esc_attr($photo->author) : '';?>" />
-                            </a>
-                            <?php } ?>
-                        </div>
-                        <?php } ?>
+                        
 
                         <?php if (!empty($item['geom'])) {
                             $reader = new EWKBReader();
@@ -297,7 +330,7 @@ try {
                 get_footer();
             }
         } else {
-            not_found();
+            request_error(200, __('Informacijos nėra', 'ntis'), __('Užklausa iš API negrąžino duomenų', 'ntis'));
         }
     } else {
 
@@ -319,7 +352,7 @@ try {
 
             if (!empty($filter_title)) {
 
-                if ($current_lang == 'lt') {
+                if ($current_lang == 'lt') { //fix like query
                     $params['query[nameLt]'] = sanitize_text_field($filter_title);
                 } else {
                     $params['query[nameEn]'] = sanitize_text_field($filter_title);
@@ -504,7 +537,6 @@ try {
                 </ul>
                 <?php echo NTIS_Tourism_Resources::loop_pagination($paged, $max_num_pages);?>
                 <?php } else { ?>
-
                     <?php _e('Pagal pateiktus filtro kriterijus paieška rezultatų negrąžino.', 'ntis');?>
                 <?php } ?>
 
@@ -515,6 +547,8 @@ try {
     <?php
                         get_footer();
             }
+        } else {
+            request_error(200, __('Informacijos nėra', 'ntis'), __('Užklausa iš API negrąžino duomenų', 'ntis'));
         }
     }
 

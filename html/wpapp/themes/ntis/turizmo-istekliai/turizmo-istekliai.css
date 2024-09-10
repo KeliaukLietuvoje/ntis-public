@@ -78,15 +78,26 @@ h1 {
 
 .tic-place__filter>.content {
     max-height: 0;
-    overflow: hidden;
+    overflow-y: auto;
     transition: max-height 0.3s ease-out;
 }
 
 .tic-place__filter>.content label {
     display: block;
     color: var(--dark-color);
+    font-size:.9rem;
 }
-
+.tic-place__filter .treeview,
+.tic-place__filter .treeview li{
+  list-style-type: none;
+  margin-left: 0;
+    padding-left: 0;
+}
+.tic-place__filter .treeview ul{
+  margin-left: 1rem;
+  padding-left: 0;
+  grid-column: 1 / span2;
+}
 .tic-place__filter>.content input[type="text"] {
     border: 1px solid #9ea7b5;
     height: 2.5rem;
@@ -100,12 +111,13 @@ h1 {
 
 .nested-checkbox {
     margin-top: 0.5rem;
-    display:flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    align-items: flex-start;
     gap:4px;
 }
 #tic-place__map{
-    height:300px;
+    height:100%;
 }
 .tic-place__filter>input:checked+label+.content {
     max-height: 12.5rem;
@@ -205,8 +217,8 @@ h1 {
 
 .list-item {
     display: grid;
-    grid-template-columns: 8rem auto;
-    gap: 0 2rem;
+    grid-template-columns: 6rem auto;
+    gap: 0 1rem;
     align-items: center;
     margin-bottom: 1.5rem;
     padding-top: 1.5rem;
@@ -229,7 +241,6 @@ h1 {
     grid-template-columns: 1.5rem auto;
     gap: 0.25rem;
 }
-
 .tic-place__detail__icon {
     color: var(--accent-color);
 }
@@ -241,7 +252,7 @@ h1 {
 
 .item-title {
     font-size: 1.5rem;
-    margin-top: 0.5rem;
+    margin-top: 0;
     margin-bottom: 0.75rem;
     color: var(--main-text-color);
     text-decoration: none;
@@ -408,7 +419,12 @@ button.icon{
   .tic-place__detail {
     display: grid;
     grid-template-columns: 1.5rem auto; /* 24px */
-    gap: 1rem; /* 16px */
+    gap: 0;
+    align-items: center;
+  }
+  .single .tic-place__detail{
+    gap: 1rem;
+    align-items: flex-start;
   }
   
   .tic-place__detail__icon {
@@ -416,16 +432,17 @@ button.icon{
   }
   
   .tic-place__detail__desc {
-    font-size: 1rem; /* 16px */
+    font-size: 0.875rem;
+    color: var(--dark-color);
+  }
+  .single .tic-place__detail__desc{
     color: var(--main-text-color);
   }
-  
   .tic-place__detail__desc span {
     color: var(--dark-color);
     display: block;
     margin-bottom: 0.25rem; /* 4px */
   }
-  
   .tic-place__additional-details {
     border-radius: 3rem; /* 24px */
     background-color: var(--grey-color);

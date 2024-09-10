@@ -18,4 +18,3 @@ Config::define('WP_MEMORY_LIMIT', '512M');
 Config::define('WP_SENTRY_PHP_DSN', env('SENTRY_DSN'));
 Config::define('WP_SENTRY_ENV', 'production');
 Config::define('WP_SENTRY_ERROR_TYPES', E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR);
-Config::define('NTIS_API_URL', 'https://dev-tip.ntis.lt/api');

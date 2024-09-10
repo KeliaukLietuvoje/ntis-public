@@ -10,12 +10,14 @@ class NTIS_Map
     }
     public function ntis_map_shortcode($atts)
     {
+        $current_lang = (function_exists('pll_current_language')) ? pll_current_language() : 'lt';
         $atts = shortcode_atts(
             array(
+                'lang' => $current_lang,
                 'coordinates' => '23.7486, 55.0904',
                 'zoom' => '7',
-                'pin' => NTIS_THEME_URL . '/inc/shortcodes/map/pin3.svg',
-                'pin_size' => '26,38',
+                'pin' => NTIS_THEME_URL . '/inc/shortcodes/map/ikona.png',
+                'pin_size' => '40,46',
                 'map_height' => '800px',
                 'add_layer' => 'false'
             ),
@@ -31,16 +33,21 @@ class NTIS_Map
         wp_enqueue_style('ntis-map-styles', NTIS_THEME_URL . '/inc/shortcodes/map/map.css', [], $ntis_map_css_ver, 'all');
         wp_enqueue_script('ntis-map-js', NTIS_THEME_URL . '/inc/shortcodes/map/map.js', ['jquery'], $ntis_map_js_ver, true);
 
-
+        $lang = substr($atts['lang'], 0, 2);
         wp_localize_script('ntis-map-js', 'ntis_map_config', array(
             'api' => ['url' => NTIS_API_URL],
             'coordinates' => explode(',', $atts['coordinates']),
             'zoom' => (int)$atts['zoom'],
+            'add_layer' => $atts['add_layer'],
             'pin' => [
                 'url' => $atts['pin'],
                 'size' => explode(',', $atts['pin_size'])
             ],
-            'add_layer' => $atts['add_layer']
+            'lang' => $lang,
+            'more_url'=> home_url($lang === 'lt' ? 'turizmo-istekliai' : 'en/tourism-resources'),
+            'i18n'=> [
+                'more'=> __('Plačiau', 'ntis'),
+            ]
         ));
 
         return '<div class="ntis-map__wrapper"><div id="ntis-map" style="height:'.$atts['map_height'].'"></div></div>';

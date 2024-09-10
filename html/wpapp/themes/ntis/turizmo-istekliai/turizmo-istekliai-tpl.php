@@ -1,4 +1,10 @@
 <?php
+use proj4php\Point as ProjPoint;
+use proj4php\Proj;
+use proj4php\Proj4php;
+use Brick\Geo\Point;
+use Brick\Geo\IO\EWKBReader;
+
 /*
   Template Name: Turizmo išteklių sąrašas
 */
@@ -11,14 +17,13 @@ function not_found()
     exit();
 }
 
-try {
-    if (function_exists('pll_current_language')) {
-        $current_lang = pll_current_language();
-    } else {
-        $current_lang = 'lt';
-    }
 
+try {
+    $current_lang = (function_exists('pll_current_language')) ? pll_current_language() : 'lt';
     $object_id = get_query_var('object_id');
+
+
+
     if (!empty($object_id)) {
         $rest_url = NTIS_API_URL.'/public/forms/'.$object_id;
         $response = wp_remote_get(
@@ -259,14 +264,33 @@ try {
                         <?php if (!empty($item['photos'])) {?>
                         <div class="tic-place__pic">
                             <?php foreach ($item['photos'] as $photo) {?>
+                                <a href="<?php echo esc_attr($photo->url);?>" data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="6d1b18c" data-elementor-lightbox-title="<?php echo esc_attr($photo->name);?> <?php echo isset($photo->author) ? ', ©'.esc_attr($photo->author) : '';?>">
                             <img
                             src="<?php echo esc_attr($photo->url);?>" alt="<?php echo esc_attr($photo->name);?> <?php echo isset($photo->author) ? ', ©'.esc_attr($photo->author) : '';?>" />
+                            </a>
                             <?php } ?>
                         </div>
                         <?php } ?>
-                        <div class="tic-place__map" data-geom="<?php echo esc_attr($item['geom']);?>">
+
+                        <?php if (!empty($item['geom'])) {
+                            $reader = new EWKBReader();
+                            $point = $reader->read(hex2bin($item['geom']));
+                            $y = $point->y();
+                            $x = $point->x();
+
+                            $proj4 = new Proj4php();
+                            $projLKS = new Proj('EPSG:3346', $proj4);
+                            $projWGS = new Proj('EPSG:4326', $proj4);
+                            $pointLKS = new ProjPoint($x, $y, $projLKS);
+                            $pointWGS = $proj4->transform($projWGS, $pointLKS);
+
+                            $latitude = $pointWGS->y;
+                            $longitude = $pointWGS->x;
+                            ?>
+                        <div class="tic-place__map" data-lat="<?php echo $latitude;?>" data-lng="<?php echo $longitude;?>">
                             <div id="tic-place__map"></div>
                         </div>
+                        <?php } ?>
                         </div>
                     </div>
                 <?php
@@ -276,7 +300,7 @@ try {
             not_found();
         }
     } else {
-        
+
         $page_size = isset($_REQUEST['limit']) ? absint($_REQUEST['limit']) : 12;
         $paged = get_query_var('paged') ? absint(get_query_var('paged')) : 1;
         $rest_url = NTIS_API_URL.'/public/forms';
@@ -286,12 +310,44 @@ try {
             'sort' => '-createdAt',
         );
 
+
         if (isset($_REQUEST['filter']) && !empty($_REQUEST['filter'])) {
-            $params['title'] = isset($_REQUEST['filter']['title']) ? $_REQUEST['filter']['title'] : '';
-            $params['price'] = isset($_REQUEST['filter']['price']) ? $_REQUEST['filter']['price'] : '';
-            $params['category'] = isset($_REQUEST['filter']['category']) ? $_REQUEST['filter']['category'] : [];
-            $params['subcategory'] = isset($_REQUEST['filter']['subcategory']) ? $_REQUEST['filter']['subcategory'] : [];
-            $params['additional'] = isset($_REQUEST['filter']['additional']) ? $_REQUEST['filter']['additional'] : [];
+            $filter_title = isset($_REQUEST['filter']['title']) ? $_REQUEST['filter']['title'] : '';
+            $filter_price = isset($_REQUEST['filter']['price']) ? $_REQUEST['filter']['price'] : [];
+            $filter_category = isset($_REQUEST['filter']['category']) ? $_REQUEST['filter']['category'] : [];
+            $filter_additional = isset($_REQUEST['filter']['additional']) ? $_REQUEST['filter']['additional'] : [];
+
+            if (!empty($filter_title)) {
+
+                if ($current_lang == 'lt') {
+                    $params['query[nameLt]'] = sanitize_text_field($filter_title);
+                } else {
+                    $params['query[nameEn]'] = sanitize_text_field($filter_title);
+                }
+            }
+
+            if (!empty($filter_price)) {
+                if (count($filter_price) == 1) {
+                    $params['query[isPaid]'] = in_array('true', $filter_price) ? 'true' : 'false';
+                }
+            }
+
+            if (!empty($filter_category)) {
+                foreach ($filter_category as $c_category) {
+                    $category = explode('|', $c_category);
+                    $params['query[categories]'][] = $category[1];
+                }
+            }
+
+            if (!empty($filter_additional)) {
+                foreach ($filter_additional as $additional) {
+                    $params['query[additionalInfos]'][] = $additional;
+                }
+            }
+
+        } else {
+            $filter_title = '';
+            $filter_price = $filter_additional = $filter_category = [];
         }
 
         $query_string = http_build_query($params);
@@ -312,6 +368,7 @@ try {
 
         if ((!is_wp_error($response)) && (200 === wp_remote_retrieve_response_code($response))) {
             $response = (array)json_decode($response['body']);
+
             if (json_last_error() === JSON_ERROR_NONE) {
 
                 $max_num_pages = $response['totalPages'];
@@ -328,7 +385,7 @@ try {
                         <label for="section1"><?php _e('Filtruoti pagal raktažodį', 'ntis');?></label>
                         <div class="content">
                             <label for="filter-title"><?php _e('Raktažodis', 'ntis');?></label>
-                            <input type="text" id="filter-title" name="filter[title]" value="<?php echo isset($params['title']) ? sanitize_text_field($params['title']) : ''; ?>">
+                            <input type="text" id="filter-title" name="filter[title]" value="<?php echo isset($filter_title) ? sanitize_text_field($filter_title) : ''; ?>">
                         </div>
                     </div>
 
@@ -336,35 +393,33 @@ try {
                         <input type="checkbox" id="section2">
                         <label for="section2"><?php _e('Kaina', 'ntis');?></label>
                         <div class="content">
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[price][]" id="filter-price-paid" value="1" <?php checked($params['price'] ?? '', 1, true);?>><label for="filter-price-paid"><?php _e('Mokama', 'ntis');?></label></div>
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[price][]" id="filter-price-free" value="0" <?php checked($params['price'] ?? '', 0, true);?>><label for="filter-price-free"><?php _e('Nemokama', 'ntis');?></label></div>
+                            <div class="nested-checkbox"><input type="checkbox" name="filter[price][]" id="filter-price-paid" value="true" <?php checked(in_array('true', $filter_price), true, true);?>><label for="filter-price-paid"><?php _e('Mokama', 'ntis');?></label></div>
+                            <div class="nested-checkbox"><input type="checkbox" name="filter[price][]" id="filter-price-free" value="false" <?php checked(in_array('false', $filter_price), true, true);?>><label for="filter-price-free"><?php _e('Nemokama', 'ntis');?></label></div>
                         </div>
                     </div>
-
+                    <?php $categories = NTIS_Tourism_Resources::fetch_endpoint('/categories/enum');?>
+                    <?php if (!empty($categories)) {?>    
                     <div class="tic-place__filter">
                         <input type="checkbox" id="section3">
                         <label for="section3"><?php _e('Kategorija', 'ntis');?></label>
                         <div class="content">
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="filter-category-1" value="1" <?php checked(in_array(1, $params['category'] ?? []), true, true);?>><label for="filter-category-1"><?php _e('Turai', 'ntis');?></label></div>
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="filter-category-2" value="2" <?php checked(in_array(2, $params['category'] ?? []), true, true);?>><label for="filter-category-2"><?php _e('Verslo turizmas', 'ntis');?></label></div>
+                            <?php echo NTIS_Tourism_Resources::generate_tree_category($filter_category, $categories);?>
                         </div>
                     </div>
-                    <div class="tic-place__filter">
-                        <input type="checkbox" id="section4">
-                        <label for="section4"><?php _e('Subkategorija', 'ntis');?></label>
-                        <div class="content">
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[subcategory][]" id="filter-subcategory-1" value="1" <?php checked(in_array(1, $params['subcategory'] ?? []), true, true);?>><label for="filter-subcategory-1"><?php _e('Parkai ir sodai', 'ntis');?></label></div>
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[subcategory][]" id="filter-subcategory-2" value="2" <?php checked(in_array(2, $params['subcategory'] ?? []), true, true);?>><label for="filter-subcategory-2"><?php _e('Piliakalniai', 'ntis');?></label></div>
-                        </div>
-                    </div>                    
+                    <?php } ?>
+                    <?php $additionalInfos = NTIS_Tourism_Resources::fetch_endpoint('/additionalInfos/enum');?>
+                    <?php if (!empty($additionalInfos)) {?>                   
                     <div class="tic-place__filter">
                         <input type="checkbox" id="section5">
                         <label for="section5"><?php _e('Papildoma informacija', 'ntis');?></label>
                         <div class="content">
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[additional][]" id="filter-additional-1" value="1" <?php checked(in_array(1, $params['additional'] ?? []), true, true);?>><label for="filter-additional-1"><?php _e('Tinkama su vaikais', 'ntis');?></label></div>
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[additional][]" id="filter-additional-2" value="2" <?php checked(in_array(2, $params['additional'] ?? []), true, true);?>><label for="filter-additional-2"><?php _e('Galimybė atsiskaityti kortele', 'ntis');?></label></div>
+                            <?php foreach ($additionalInfos as $k => $additionalInfo) {
+                                $v = $additionalInfo['name']; ?>
+                            <div class="nested-checkbox"><input type="checkbox" name="filter[additional][]" id="filter-additional-<?php echo $k;?>" value="<?php echo $v;?>" <?php checked(in_array($v, $filter_additional ?? []), true, true);?>><label for="filter-additional-<?php echo $k;?>"><?php echo $v;?></label></div>
+                            <?php } ?>
                         </div>
                     </div>
+                    <?php } ?>
                 </form>
             </div>
 
@@ -405,7 +460,7 @@ try {
                 </div>
 
                 <?php
-                if (isset($response['rows'])) { ?>
+                if (isset($response['rows']) && $response['total'] > 0) { ?>
                 <ul class="tic-place__places list">
                     <?php  foreach ($response['rows'] as $item) {
                         $title = ($current_lang == 'lt') ? $item->nameLt : $item->nameEn;
@@ -419,16 +474,14 @@ try {
                             alt="<?php _e('Trūksta paveikslėlio');?>" />
                         <?php } ?>
                         <div class="tic-place__detail">
-                            <span class="tic-place__detail__icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M4 10h12" />
-                                    <path d="M4 14h9" />
-                                    <path
-                                        d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2" />
-                                </svg>
-                            </span>
+                            <svg class="tic-place__detail__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M4 10h12" />
+                                <path d="M4 14h9" />
+                                <path
+                                    d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2" />
+                            </svg>
                             <div class="tic-place__detail__desc">
                                 <?php echo $item->isPaid == true ? __('Mokama', 'ntis') : __('Nemokama', 'ntis');?></div>
                         </div>
@@ -450,6 +503,9 @@ try {
                     <?php } ?>
                 </ul>
                 <?php echo NTIS_Tourism_Resources::loop_pagination($paged, $max_num_pages);?>
+                <?php } else { ?>
+
+                    <?php _e('Pagal pateiktus filtro kriterijus paieška rezultatų negrąžino.', 'ntis');?>
                 <?php } ?>
 
             </div>

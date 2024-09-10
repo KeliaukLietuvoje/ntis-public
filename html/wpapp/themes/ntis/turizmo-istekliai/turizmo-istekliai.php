@@ -1,5 +1,4 @@
 <?php
-
 class NTIS_Tourism_Resources
 {
     public function __construct()
@@ -14,27 +13,16 @@ class NTIS_Tourism_Resources
     }
     public function turizmo_istekliai_rewrite_rule()
     {
-        if (function_exists('pll_current_language')) {
-            $current_lang = pll_current_language();
-        } else {
-            $current_lang = 'lt';
-        }
-        if($current_lang == 'lt') {
-            $page_id = $this->get_id_by_slug('turizmo-istekliai');
+        $current_lang = function_exists('pll_current_language') ? pll_current_language() : 'lt';
+        $page_id = $this->get_id_by_slug($current_lang === 'lt' ? 'turizmo-istekliai' : 'tourism-resources');
+        if ($page_id) {
             add_rewrite_rule(
-                '^turizmo-istekliai/([^/]*)/id:([0-9]+)/?$',
-                'index.php?page_id='.$page_id.'&object=$matches[1]&object_id=$matches[2]',
+                '^' . ($current_lang === 'lt' ? 'turizmo-istekliai' : 'en/tourism-resources') . '/([^/]*)/id:([0-9]+)/?$',
+                'index.php?page_id=' . $page_id . '&object=$matches[1]&object_id=$matches[2]',
                 'top'
             );
-        }else{
-            $page_id = $this->get_id_by_slug('tourism-resources');
-            add_rewrite_rule(
-                '^tourism-resources/([^/]*)/id:([0-9]+)/?$',
-                'index.php?page_id='.$page_id.'&object=$matches[1]&object_id=$matches[2]',
-                'top'
-            );
+            flush_rewrite_rules();
         }
-
     }
     public static function fix_url($url)
     {
@@ -56,7 +44,12 @@ class NTIS_Tourism_Resources
                 'objVars',
                 array(
                     'ajaxurl' => admin_url('admin-ajax.php'),
-                    'form_action' => get_the_permalink(1414)
+                    'map'=>[
+                        'ico'=> NTIS_THEME_URL . '/inc/shortcodes/map/ikona.png',
+                        'ico_width'=> 40,
+                        'ico_height'=> 46,
+                        'zoom'=> 10,
+                    ]
                 )
             );
         }
@@ -98,6 +91,61 @@ class NTIS_Tourism_Resources
 
         return $html;
     }
+
+    public static function fetch_endpoint($endpoint, $params = [])
+    {
+        $url = NTIS_API_URL. $endpoint . '?' . http_build_query($params);
+        $response = wp_remote_get($url,
+        [
+            'timeout'     => 120,
+            'httpversion' => CURL_HTTP_VERSION_1_1,
+            'sslverify' => WP_DEBUG ? false : true,
+            'headers' => [
+            'Accept' => 'application/json'
+            ]
+        ]);
+        if ((!is_wp_error($response)) && (200 === wp_remote_retrieve_response_code($response))) {
+            $body = wp_remote_retrieve_body($response);
+            return json_decode($body, true);
+        }else{
+            return [];
+        }
+    }
+
+    public static function generate_tree_category($filter_categories, $items, $depth = 0) {
+        $html = '<ul' . ($depth === 0 ? ' class="treeview"' : '') . '>';
+        $index = 0;
+    
+        foreach ($items as $item) {
+            $name = htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8');
+            $checkboxId = 'checkbox-' . $depth . '-' . $index;
+            $checkboxName = 'filter[category][]';
+            
+            // Check if the current checkbox should be checked
+            $isChecked = in_array($depth . '-' . $index.'|'.$name, $filter_categories ?? []) ? 'checked' : '';
+            
+            $html .= '<li class="nested-checkbox">';
+            $html .= '<input type="checkbox" name="' . $checkboxName . '" id="' . $checkboxId . '" '
+                   . $isChecked . ' value="' . $depth . '-' . $index . '|'.$name.'">';
+            $html .= '<label for="' . $checkboxId . '">' . $name . '</label>';
+            
+            if (isset($item['children']) && is_array($item['children'])) {
+                $html .= self::generate_tree_category($filter_categories, $item['children'], $depth + 1);
+            }
+            
+            $html .= '</li>';
+            $index++;
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+    
+    
 }
+
+/*
+<div class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="filter-category-1" value="1" <?php checked(in_array(1, $params['category'] ?? []), true, true);?>><label for="filter-category-1"><?php _e('Turai', 'ntis');?></label></div>
+                            <div class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="filter-category-2" value="2" <?php checked(in_array(2, $params['category'] ?? []), true, true);?>><label for="filter-category-2"><?php _e('Verslo turizmas', 'ntis');?></label></div>
+                            */
 
 new NTIS_Tourism_Resources();

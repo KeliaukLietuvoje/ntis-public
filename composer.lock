@@ -4,8 +4,64 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73e7b8d48bfdbfde3812f3c3589c2a30",
+    "content-hash": "00e598794c63551bd6208775a9ce5c3a",
     "packages": [
+        {
+            "name": "brick/geo",
+            "version": "0.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brick/geo.git",
+                "reference": "0ba1296d14b4c1164659b4b9911e13ea350f5df4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brick/geo/zipball/0ba1296d14b4c1164659b4b9911e13ea350f5df4",
+                "reference": "0ba1296d14b4c1164659b4b9911e13ea350f5df4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "brick/reflection": "~0.5.0",
+                "ext-json": "*",
+                "ext-pdo": "*",
+                "ext-sqlite3": "*",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^10.0",
+                "vimeo/psalm": "5.20.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Brick\\Geo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "GIS geometry library",
+            "keywords": [
+                "brick",
+                "geo",
+                "geography",
+                "geometry",
+                "gis"
+            ],
+            "support": {
+                "issues": "https://github.com/brick/geo/issues",
+                "source": "https://github.com/brick/geo/tree/0.11.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/BenMorel",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-08-19T20:33:41+00:00"
+        },
         {
             "name": "clue/stream-filter",
             "version": "v1.7.0",
@@ -1185,6 +1241,70 @@
                 }
             ],
             "time": "2024-07-20T21:41:07+00:00"
+        },
+        {
+            "name": "proj4php/proj4php",
+            "version": "2.0.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/proj4php/proj4php.git",
+                "reference": "3558c265a86c3243547391c0944f8303dee493b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/proj4php/proj4php/zipball/3558c265a86c3243547391c0944f8303dee493b3",
+                "reference": "3558c265a86c3243547391c0944f8303dee493b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "9.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "proj4php\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "julien2512",
+                    "email": "moquet.julien@gmail.com",
+                    "homepage": "https://github.com/julien2512",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Jason Judge",
+                    "email": "jason.judge@academe.co.uk",
+                    "homepage": "http://academe.co.uk",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Nick Blackwell",
+                    "email": "nickblackwell82@gmail.com",
+                    "homepage": "https://people.ok.ubc.ca/nblackwe",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP-Class for geographic coordinates transformation using proj4 definitions, thanks to a translation from Proj4JS",
+            "homepage": "https://github.com/proj4php/proj4php",
+            "keywords": [
+                "coordinates",
+                "geographic",
+                "proj4",
+                "proj4js"
+            ],
+            "support": {
+                "issues": "https://github.com/proj4php/proj4php/issues",
+                "source": "https://github.com/proj4php/proj4php/tree/2.0.17"
+            },
+            "time": "2024-07-19T19:46:30+00:00"
         },
         {
             "name": "psr/http-client",
@@ -2780,12 +2900,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "5ddbc0bf3c8c38da3f706c8d1203f9a6a451d44d"
+                "reference": "f6547941a3b3a96c1b20b77c6ebf126b195f814e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5ddbc0bf3c8c38da3f706c8d1203f9a6a451d44d",
-                "reference": "5ddbc0bf3c8c38da3f706c8d1203f9a6a451d44d",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f6547941a3b3a96c1b20b77c6ebf126b195f814e",
+                "reference": "f6547941a3b3a96c1b20b77c6ebf126b195f814e",
                 "shasum": ""
             },
             "conflict": {
@@ -3235,7 +3355,7 @@
                 "phpmyfaq/phpmyfaq": "<3.2.5|==3.2.5",
                 "phpoffice/common": "<0.2.9",
                 "phpoffice/phpexcel": "<1.8",
-                "phpoffice/phpspreadsheet": "<2.2.1",
+                "phpoffice/phpspreadsheet": "<1.29.1|>=2,<2.2.1",
                 "phpseclib/phpseclib": "<2.0.47|>=3,<3.0.36",
                 "phpservermon/phpservermon": "<3.6",
                 "phpsysinfo/phpsysinfo": "<3.4.3",
@@ -3244,9 +3364,10 @@
                 "phpxmlrpc/extras": "<0.6.1",
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pi/pi": "<=2.5",
-                "pimcore/admin-ui-classic-bundle": "<=1.5.1",
+                "pimcore/admin-ui-classic-bundle": "<1.5.4",
                 "pimcore/customer-management-framework-bundle": "<4.0.6",
                 "pimcore/data-hub": "<1.2.4",
+                "pimcore/data-importer": "<1.8.9|>=1.9,<1.9.3",
                 "pimcore/demo": "<10.3",
                 "pimcore/ecommerce-framework-bundle": "<1.0.10",
                 "pimcore/perspective-editor": "<1.5.1",
@@ -3591,7 +3712,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-30T15:05:01+00:00"
+            "time": "2024-09-04T15:05:11+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

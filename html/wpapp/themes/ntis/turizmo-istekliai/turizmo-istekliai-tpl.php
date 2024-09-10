@@ -352,8 +352,8 @@ try {
 
             if (!empty($filter_title)) {
 
-                if ($current_lang == 'lt') {
-                    $params['query[nameLt][$ilike]'] = '%'.sanitize_text_field($filter_title).'%';
+                if ($current_lang == 'lt') { //fix like query
+                    $params['query[nameLt]'] = sanitize_text_field($filter_title);
                 } else {
                     $params['query[nameEn]'] = sanitize_text_field($filter_title);
                 }

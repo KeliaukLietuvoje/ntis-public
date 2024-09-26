@@ -151,7 +151,7 @@
                 el.style.height = `${ntis_map_config.pin.size[1]}px`;
 
                 // Create a popup instance
-                const popup = new maplibregl.Popup({ offset: 25 }).setText('Popup content goes here.');
+                const popup = new maplibregl.Popup({ offset: 25 }).setText('');
 
                 new maplibregl.Marker({ element: el })
                     .setLngLat(ntis_map_config.coordinates)

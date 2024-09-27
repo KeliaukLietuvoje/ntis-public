@@ -170,7 +170,7 @@ class NTIS_Tourism_Resources
                 wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', ['jquery'], '11', true);
                 wp_enqueue_style('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', [], '11', 'all');
             }
-            wp_enqueue_script('turizmo-istekliai', NTIS_THEME_URL . '/turizmo-istekliai/turizmo-istekliai.js', ['jquery'], '1.1.5', true);
+            wp_enqueue_script('turizmo-istekliai', NTIS_THEME_URL . '/turizmo-istekliai/turizmo-istekliai.js', ['jquery'], '1.1.6', true);
             wp_localize_script(
                 'turizmo-istekliai',
                 'objVars',

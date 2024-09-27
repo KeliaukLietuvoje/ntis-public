@@ -14,57 +14,52 @@ class NTIS_Tourism_Resources
         add_action('wp_ajax_get_tourism_resources', array($this, 'get_tourism_resources'));
         add_action('wp_ajax_nopriv_get_tourism_resources', array($this, 'get_tourism_resources'));
     }
-    public function get_tourism_resources() {
+    public function get_tourism_resources()
+    {
         $current_lang = (function_exists('pll_current_language')) ? pll_current_language() : 'lt';
         $page_size = isset($_REQUEST['limit']) ? absint($_REQUEST['limit']) : 12;
         $view = (isset($_REQUEST['view']) && $_REQUEST['view'] == 'list') ? 'list' : 'grid';
         $paged = $_REQUEST['paged'] ? absint($_REQUEST['paged']) : 1;
         $rest_url = NTIS_API_URL . '/public/forms';
-        
+
         $params = [
             'page' => $paged,
             'pageSize' => $page_size,
             'sort' => '-createdAt',
         ];
-    
+
         // Process filters
         $filters = $_REQUEST['filter'] ?? [];
         $filter_title = $filters['title'] ?? '';
         $filter_price = $filters['price'] ?? [];
         $filter_category = $filters['category'] ?? [];
-        $filter_subcategory = $filters['subcategory'] ?? [];
         $filter_additional = $filters['additional'] ?? [];
-    
+
         // Title filter
         if (!empty($filter_title)) {
             $param_key = ($current_lang == 'lt') ? 'query[nameLt][$ilike]' : 'query[nameEn][$ilike]';
             $params[$param_key] = '%' . sanitize_text_field($filter_title) . '%';
         }
-    
+
         // Price filter
         if (!empty($filter_price) && count($filter_price) == 1) {
             $params['query[isPaid]'] = in_array('true', $filter_price) ? 'true' : 'false';
         }
-    
+
         // Category filter
         if (!empty($filter_category)) {
             $params['query[categories][id][$in]'] = $filter_category;
         }
-    
-        // Subcategory filter
-        if (!empty($filter_subcategory)) {
-            $params['query[subCategories][id][$in]'] = $filter_subcategory;
-        }
-    
+
         // Additional filter
         if (!empty($filter_additional)) {
             $params['query[additionalInfos][id][$in]'] = $filter_additional;
         }
-    
+
         // Build REST API URL with query string
         $query_string = http_build_query($params);
         $rest_url .= '?' . $query_string;
-    
+
         // Make API request
         $response = wp_remote_get($rest_url, [
             'timeout' => 120,
@@ -74,28 +69,32 @@ class NTIS_Tourism_Resources
                 'Accept' => 'application/json'
             ]
         ]);
-    
+
         // Handle API response
         if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
             $response_data = json_decode(wp_remote_retrieve_body($response), true);
-    
+
             if (json_last_error() === JSON_ERROR_NONE && !empty($response_data['rows'])) {
                 ob_start();
                 echo '<ul class="tic-place__places list '.$view.'">';
-                
+
                 foreach ($response_data['rows'] as $item) {
                     $title = ($current_lang == 'lt') ? $item['nameLt'] : $item['nameEn'];
                     $photo = $item['photos'][0] ?? null;
                     $photoUrl = $photo['url'] ?? '';
                     $photoName = !empty($photo['name']) ? esc_attr($photo['name']) . ', ' : '';
                     $photoAuthor = $photo['author'] ?? '';
-    
+
+
                     echo '<li class="list-item">';
+                    echo '<a href="'.get_the_permalink().sanitize_title($title).'/id:'.$item['id'].'/">';
                     if (!empty($photoUrl)) {
                         echo '<img src="' . esc_url($photoUrl) . '" alt="' . $photoName . (!empty($photoAuthor) ? ' ©' . esc_attr($photoAuthor) : '') . '" />';
                     } else {
                         echo '<img src="' . esc_url(NTIS_THEME_URL . '/assets/images/placeholder.png') . '" alt="' . __('Trūksta paveikslėlio', 'ntis') . '" />';
                     }
+                    echo '</a>';
+                    echo '<div>';
                     echo '<div class="tic-place__detail">
                             <svg class="tic-place__detail__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -106,7 +105,7 @@ class NTIS_Tourism_Resources
                             <div class="tic-place__detail__desc">' . ($item['isPaid'] ? __('Mokama', 'ntis') : __('Nemokama', 'ntis')) . '</div>
                         </div>';
                     echo '<a href="' . get_the_permalink() . sanitize_title($title) . '/id:' . $item['id'] . '/" class="item-title">' . esc_html($title) . '</a>';
-                    
+
                     if (!empty($item['categories'])) {
                         echo '<div class="tic-place__categories tags-wrapper">';
                         foreach ($item['categories'] as $category) {
@@ -119,26 +118,27 @@ class NTIS_Tourism_Resources
                         }
                         echo '<span class="tic-place__category more-button">'.__('...', 'ntis').'</span>';
                         echo '</div>';
-                        
+
                     }
+                    echo '</div>';
                     echo '</li>';
                 }
-    
+
                 echo '</ul>';
-    
+
                 $html = ob_get_clean();
                 $html .= self::loop_pagination($paged, ceil($response_data['total'] / $page_size), $params);
-                wp_send_json_success(['html' => $html]);
+                wp_send_json_success(['html' => $html, 'total' => $response_data['total']]);
             } else {
                 wp_send_json_success(['html' => __('Pagal pateiktus filtro kriterijus paieška rezultatų negrąžino.', 'ntis')]);
             }
         } else {
             wp_send_json_error(['message' => __('Nepavyko gauti duomenų iš serverio.', 'ntis')]);
         }
-    
+
         wp_die();
     }
-    
+
     public function turizmo_istekliai_rewrite_rule()
     {
         $current_lang = function_exists('pll_current_language') ? pll_current_language() : 'lt';
@@ -181,6 +181,12 @@ class NTIS_Tourism_Resources
                         'ico_width' => 40,
                         'ico_height' => 46,
                         'zoom' => 10,
+                    ],
+                    'i18n' => [
+                        'show_filters' => __('Rodyti filtrus', 'ntis'),
+                        'hide_filters' => __('Slėpti filtrus', 'ntis'),
+                        'show_more' => __('+ Rodyti daugiau', 'ntis'),
+                        'show_less' => __('- Rodyti mažiau', 'ntis'),
                     ]
                 )
             );
@@ -210,18 +216,18 @@ class NTIS_Tourism_Resources
 
         $current_lang = function_exists('pll_current_language') ? pll_current_language() : 'lt';
 
-        $page = get_page_by_path( 'turizmo-istekliai' );
-        $page_id = pll_get_post( $page->ID, $current_lang );     
+        $page = get_page_by_path('turizmo-istekliai');
+        $page_id = pll_get_post($page->ID, $current_lang);
         $page = get_page($page_id);
 
-        $base_url = home_url($page->post_name); 
-        $base_url = trailingslashit($base_url) . 'page/%#%/'; 
+        $base_url = home_url($page->post_name);
+        $base_url = trailingslashit($base_url) . 'page/%#%/';
 
         $html = paginate_links(array(
             'base'       => $base_url,
             'format'     => '',
             'current'    => max(1, $paged),
-            'add_args'   =>[], // Add the query args if any
+            'add_args'   => [], // Add the query args if any
             'total'      => $max_page,
             'mid_size'   => 1,
             'end_size'   => 1,
@@ -257,31 +263,37 @@ class NTIS_Tourism_Resources
 
     public static function generate_tree_category($current_lang, $filter_categories, $filter_subcategories, $items, $depth = 0)
     {
+        global $iteration;
         $html = '<ul' . ($depth === 0 ? ' class="treeview"' : '') . '>';
         $index = 0;
 
         foreach ($items as $item) {
-            $name = $current_lang === 'lt' ? $item['name'] : $item['name_en'];
+            $name = $current_lang === 'lt' ? $item['name'] : $item['nameEn'];
             $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+
             $checkboxId = 'checkbox-' . $item['id'];
-
-
-            $checkboxName = $depth == 0 ? 'filter[category][]':'filter[subcategory][]';
 
             // Check if the current checkbox should be checked
             $isChecked = $depth == 0 ? (in_array($item['id'], $filter_categories ?? []) ? 'checked' : '') : (in_array($item['id'], $filter_subcategories ?? []) ? 'checked' : '');
-            
-            $html .= '<li class="nested-checkbox">';
-            $html .= '<input type="checkbox" name="' . $checkboxName . '" id="' . $checkboxId . '" '
-                   . $isChecked . ' value="' . $item['id'].'">';
-            $html .= '<label for="' . $checkboxId . '">' . $name . '</label>';
+
+            //$isChild = $depth == 0 ? ' category' : ' subcategory';
+            if ($iteration > 4) {
+                $showed = true;
+                $more_options = ' class="more-options"';
+            } else {
+                $more_options = '';
+            }
+            $html .= '<li'.$more_options.'><label for="' . $checkboxId . '" class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="' . $checkboxId . '" '
+                   . $isChecked . ' value="' . $item['id'].'"><span>'. $name . '</span></label>';
 
             if (isset($item['children']) && is_array($item['children'])) {
                 $html .= self::generate_tree_category($current_lang, $filter_categories, $filter_subcategories, $item['children'], $depth + 1);
             }
 
             $html .= '</li>';
+
             $index++;
+            $iteration++;
         }
         $html .= '</ul>';
         return $html;
@@ -289,10 +301,4 @@ class NTIS_Tourism_Resources
 
 
 }
-
-/*
-<div class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="filter-category-1" value="1" <?php checked(in_array(1, $params['category'] ?? []), true, true);?>><label for="filter-category-1"><?php _e('Turai', 'ntis');?></label></div>
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="filter-category-2" value="2" <?php checked(in_array(2, $params['category'] ?? []), true, true);?>><label for="filter-category-2"><?php _e('Verslo turizmas', 'ntis');?></label></div>
-                            */
-
 new NTIS_Tourism_Resources();

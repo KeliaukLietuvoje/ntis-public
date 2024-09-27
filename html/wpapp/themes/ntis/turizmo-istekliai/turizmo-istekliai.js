@@ -80,7 +80,6 @@
         },
     
         adjustTagVisibility(wrapper, tags, moreButton) {
-            console.log('adjusting visibility');
             const wrapperWidth = wrapper.offsetWidth;
             let currentWidth = 0;
             let isOverflowing = false;

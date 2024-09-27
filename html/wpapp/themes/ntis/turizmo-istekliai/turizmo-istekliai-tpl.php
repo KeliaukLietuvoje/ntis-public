@@ -69,7 +69,8 @@ try {
                 }
 
                 $season_labels = ['SUMMER' => __('Vasara', 'ntis'), 'AUTUMN' => __('Ruduo', 'ntis'), 'WINTER' => __('Žiema', 'ntis'), 'SPRING' => __('Pavasaris', 'ntis')];
-                if (isset($item['seasons']) && count($item['seasons']) == 4) {
+
+                if (empty($item['seasons']) || count($item['seasons']) == 4) {
                     $season_label = __('Visus metus', 'ntis');
                 } else {
                     $season_label = '';
@@ -114,9 +115,9 @@ try {
     
 
     <div class="tic-place__content single">
-        <?php if(isset($item['isActive']) && $item['isActive']!=1){ ?>
+        <?php if (isset($item['isActive']) && $item['isActive'] != 1) { ?>
         <div class="tic-is__inactive">
-            <?php _e('Informuojame, kad šiuo metu šis objektas yra laikinai uždarytas.','ntis');?>
+            <?php _e('Informuojame, kad šiuo metu šis objektas yra laikinai uždarytas.', 'ntis');?>
         </div>
         <?php } ?>
         <div class="tic-place__column">
@@ -402,54 +403,59 @@ try {
     <div class="tic-place">
         <div class="tic-place__content">
             <div class="tic-place__filters">
-                <form method="GET" id="turizmo-istekliai-filter-form" action="<?php echo get_the_permalink();?>">
+                <form method="POST" id="turizmo-istekliai-filter-form" action="<?php echo get_the_permalink();?>">
                     <input type="hidden" name="action" value="get_tourism_resources">
-                    <div class="tic-place__filter">
-                        <input type="checkbox" id="section1">
-                        <label for="section1"><?php _e('Filtruoti pagal raktažodį', 'ntis');?></label>
-                        <div class="content">
+                    <div class="tic-place__filter filter-wrapper">
+                        <div class="filter-title">
+                            <span><?php _e('Filtruoti pagal raktažodį', 'ntis');?></span>
+                            <button type="button" class="filter-toggle" aria-expanded="true"><span class="ico-expanded"></span></button>
+                        </div>
+                        <div class="filter-content">
                             <label for="filter-title"><?php _e('Raktažodis', 'ntis');?></label>
                             <input type="text" id="filter-title" name="filter[title]"
                                 value="<?php echo isset($filter_title) ? sanitize_text_field($filter_title) : ''; ?>">
                         </div>
                     </div>
 
-                    <div class="tic-place__filter">
-                        <input type="checkbox" id="section2">
-                        <label for="section2"><?php _e('Kaina', 'ntis');?></label>
-                        <div class="content">
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[price][]"
-                                    id="filter-price-paid" value="true"
-                                    <?php checked(in_array('true', $filter_price), true, true);?>><label
-                                    for="filter-price-paid"><?php _e('Mokama', 'ntis');?></label></div>
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[price][]"
-                                    id="filter-price-free" value="false"
-                                    <?php checked(in_array('false', $filter_price), true, true);?>><label
-                                    for="filter-price-free"><?php _e('Nemokama', 'ntis');?></label></div>
+                    <div class="tic-place__filter filter-wrapper">
+                        <div class="filter-title">
+                            <span><?php _e('Kaina', 'ntis');?></span>
+                            <button  type="button" class="filter-toggle" aria-expanded="true"><span class="ico-expanded"></span></button>
+                        </div>
+                        <div class="filter-content">
+                            <label class="nested-checkbox" for="filter-price-paid"><input type="checkbox" name="filter[price][]" id="filter-price-paid" value="true" <?php checked(in_array('true', $filter_price), true, true);?>><?php _e('Mokama', 'ntis');?></label>
+                            <label class="nested-checkbox" for="filter-price-free"><input type="checkbox" name="filter[price][]" id="filter-price-free" value="false" <?php checked(in_array('false', $filter_price), true, true);?>><?php _e('Nemokama', 'ntis');?></label>
                         </div>
                     </div>
                     <?php $categories = NTIS_Tourism_Resources::fetch_endpoint('/categories/enum');?>
                     <?php if (!empty($categories)) {?>
-                    <div class="tic-place__filter">
-                        <input type="checkbox" id="section3">
-                        <label for="section3"><?php _e('Kategorija', 'ntis');?></label>
-                        <div class="content">
+                    <div class="tic-place__filter filter-wrapper">
+                        <div class="filter-title">
+                            <span><?php _e('Kategorija', 'ntis');?></span>
+                            <button  type="button" class="filter-toggle" aria-expanded="true"><span class="ico-expanded"></span></button>
+                        </div>
+                        <div class="filter-content">
                             <?php echo NTIS_Tourism_Resources::generate_tree_category($current_lang, $filter_category, $filter_subcategory, $categories);?>
+                            <?php if (count($categories) > 4) { ?>
+                                <button type="button" class="show-more"><?php _e('+ Rodyti daugiau', 'ntis');?></button>
+                            <?php } ?>
                         </div>
                     </div>
                     <?php } ?>
                     <?php $additionalInfos = NTIS_Tourism_Resources::fetch_endpoint('/additionalInfos/enum');?>
                     <?php if (!empty($additionalInfos)) {?>
-                    <div class="tic-place__filter">
-                        <input type="checkbox" id="section5">
-                        <label for="section5"><?php _e('Papildoma informacija', 'ntis');?></label>
-                        <div class="content">
-                            <?php foreach ($additionalInfos as $k => $additionalInfo) {
-                                $v = $additionalInfo['name']; ?>
-                            <div class="nested-checkbox"><input type="checkbox" name="filter[additional][]"
-                                    id="filter-additional-<?php echo $k;?>" value="<?php echo $v;?>"
-                                    <?php checked(in_array($v, $filter_additional ?? []), true, true);?>><label
-                                    for="filter-additional-<?php echo $k;?>"><?php echo $v;?></label></div>
+                    <div class="tic-place__filter filter-wrapper">
+                        <div class="filter-title">
+                            <span><?php _e('Papildoma informacija', 'ntis');?></span>
+                            <button type="button" class="filter-toggle" aria-expanded="true"><span class="ico-expanded"></span></button>
+                        </div>
+                        <div class="filter-content">
+                            <?php foreach ($additionalInfos as $additionalInfo) {
+                                $v = $current_lang == 'lt' ? $additionalInfo['name'] : $additionalInfo['nameEn']; ?>
+                            <label class="nested-checkbox" for="filter-additional-<?php echo $additionalInfo['id'];?>"><input type="checkbox" name="filter[additional][]"
+                                    id="filter-additional-<?php echo $additionalInfo['id'];?>" value="<?php echo $additionalInfo['id'];?>"
+                                    <?php checked(in_array($v, $filter_additional ?? []), true, true);?>><span
+                                    ><?php echo $v;?></span></label>
                             <?php } ?>
                         </div>
                     </div>
@@ -459,7 +465,7 @@ try {
 
             <div class="tic-place__column">
                 <div class="tic-place__options">
-                    <div></div>
+                    <div><button type="button" class="btn__filters--toggle"><?php _e('Slėpti filtrus', 'ntis');?></button> Rasta objektų : <span class="tic-total"><?php echo $response['total'];?></span></div>
                     <div class="view-options">
                         <button class="icon icon-list active">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
@@ -498,15 +504,17 @@ try {
                             $photoUrl = $photo->url ?? '';
                             $photoName = !empty($photo->name) ? $photo->name.', ' : '';
                             $photoAuthor = $photo->author ?? '';
-
+                            ?>
+                            <a href="<?php echo get_the_permalink();?><?php echo sanitize_title($title);?>/id:<?php echo $item->id;?>/">
+                            <?php
                             if (!empty($photoUrl)) { ?>
-                            <img src="<?php echo esc_url($photoUrl); ?>"
-                                alt="<?php echo esc_attr($photoName); ?><?php echo !empty($photoAuthor) ? ' ©' . esc_attr($photoAuthor) : ''; ?>" />
+                            <img src="<?php echo esc_url($photoUrl); ?>" alt="<?php echo esc_attr($photoName); ?><?php echo !empty($photoAuthor) ? ' ©' . esc_attr($photoAuthor) : ''; ?>" />
                             <?php } else { ?>
                             <img src="<?php echo esc_url(NTIS_THEME_URL . '/assets/images/placeholder.png'); ?>"
                                 alt="<?php _e('Trūksta paveikslėlio'); ?>" />
                             <?php } ?>
-
+                            </a>
+                            <div>
                             <div class="tic-place__detail">
                                 <svg class="tic-place__detail__icon" xmlns="http://www.w3.org/2000/svg" width="18"
                                     height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -537,6 +545,7 @@ try {
                                 <span class="tic-place__category more-button"><?php _e('...', 'ntis');?></span>
                             </div>
                             <?php } ?>
+                            </div>
                         </li>
                         <?php } ?>
                     </ul>

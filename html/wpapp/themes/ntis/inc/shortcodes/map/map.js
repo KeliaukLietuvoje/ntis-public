@@ -13,10 +13,25 @@
                 container: 'ntis-map',
                 style: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
                 center: ntis_map_config.coordinates,
-                zoom: ntis_map_config.zoom
+                zoom: ntis_map_config.zoom,
+                attributionControl: false
+            });
+
+            map.addControl(new maplibregl.AttributionControl({
+                compact: true,
+                customAttribution: '© <a href="https://ntis.lt/">Turizmo išteklių posistemė</a>'
+            }));
+
+            map.on('load', function() {
+                const attributionDetails = document.querySelector('.maplibregl-compact');
+                if (attributionDetails) {
+                    attributionDetails.removeAttribute('open'); 
+                    attributionDetails.classList.remove('maplibregl-compact-show'); 
+                }
             });
 
             if (ntis_map_config.add_layer === 'true') {
+              
                 map.on('load', async () => {
                     const image = await map.loadImage(ntis_map_config.pin.url);
      

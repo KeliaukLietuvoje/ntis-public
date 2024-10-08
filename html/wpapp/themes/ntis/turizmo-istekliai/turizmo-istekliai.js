@@ -16,8 +16,17 @@
                 attributionControl: false
             });
             map.addControl(new maplibregl.AttributionControl({
-                compact: true
+                compact: true,
+                customAttribution: '© <a href="https://ntis.lt/">Nacionalinė turizmo informacinė sistema</a>'
             }));
+            map.addControl(new maplibregl.FullscreenControl());
+            map.on('load', function() {
+                const attributionDetails = document.querySelector('.maplibregl-compact');
+                if (attributionDetails) {
+                    attributionDetails.removeAttribute('open'); 
+                    attributionDetails.classList.remove('maplibregl-compact-show'); 
+                }
+            });
 
 
             const markerDiv = document.createElement('div');

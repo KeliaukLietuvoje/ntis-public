@@ -48,7 +48,6 @@
     "wpackagist-plugin/amazon-s3-and-cloudfront": "*",
     "wpackagist-plugin/elementor": "*",
     "wpackagist-plugin/header-footer-elementor": "*",
-    "wpackagist-plugin/ilmenite-cookie-consent": "*",
     "wpackagist-plugin/userway-accessibility-widget": "*",
     "wpackagist-plugin/ga-google-analytics": "*",
     "wpackagist-plugin/query-monitor": "*",

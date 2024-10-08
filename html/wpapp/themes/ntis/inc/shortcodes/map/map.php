@@ -47,6 +47,7 @@ class NTIS_Map
             'more_url'=> home_url($lang === 'lt' ? 'turizmo-istekliai' : 'en/tourism-resources'),
             'i18n'=> [
                 'more'=> __('Plačiau', 'ntis'),
+                'object'=> __('Turizmo objektas', 'ntis'),
             ]
         ));
 

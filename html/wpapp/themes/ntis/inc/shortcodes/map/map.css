@@ -20,10 +20,11 @@
     width:100%;
 }
 .maplibregl-popup-content{
-    border-radius:12px;
-    padding:16px;
+    border-radius:12px !important;
+    padding: 0;
     background-color:#fff;
     min-width:280px;
+    overflow: hidden;
 }
 .ntis-popup img{
     object-fit: cover;
@@ -113,30 +114,57 @@ ul.rounded-tags li{
 .ntis-popup .place__url:hover .place__detail__icon{
     color: var(--link-background);
 }
-/* .tags-wrapper {
-    position: relative;
-    display: block;
-    max-width: 100%; 
-    overflow-x: auto; 
-    white-space: nowrap; 
-    scrollbar-width: thin; 
-    margin-bottom: 16px;
+#popup-navigation{
+    display: flex;
+    gap: 4px;
+    margin: 4px 0 0 0;
+    align-items: center;
+    justify-content: space-between;
+    color: #535D6C;
+    background:#F7F9FB;
+    padding:8px 16px;
+    border-top: 1px solid #CED6E0;
 }
-.tags-wrapper::-webkit-scrollbar {
-    height: 6px; 
-    background: transparent; 
-  }
-  .tags-wrapper::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-  }
-  .tags-wrapper::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50px; 
-    height: 100%;
-    pointer-events: none;
-    background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)); 
-  } */
+#popup-navigation > div{
+    display: flex;
+    gap: 4px;
+    margin: 4px 0;
+    align-items: center;
+    justify-content: space-between;
+}
+#popup-navigation button{
+    background:transparent;
+    border: none;
+    cursor:pointer;
+    padding:2px;
+}
+#popup-navigation button svg{
+    stroke:#003C3A
+}
+#popup-navigation button:disabled svg{
+    stroke:#9EA7B5
+}
+#pageInput{
+    width: 50px;
+    padding: 2px;
+    border: 1px solid #CED6E0;
+    border-radius: 15px;
+    text-align: center;
+    height: 32px;
+    line-height: 32px;
+    margin-right:5px;
+}
+.ntis-popup{
+    padding:16px;
+}
+
+#pageInput::-webkit-outer-spin-button,
+#pageInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#pageInput {
+  -moz-appearance: textfield;
+}

@@ -114,6 +114,11 @@ ul.rounded-tags li{
 .ntis-popup .place__url:hover .place__detail__icon{
     color: var(--link-background);
 }
+
+.checkbox-list label{
+    color: var(--dark-color);
+    font-size: .9rem;
+}
 #popup-navigation{
     display: flex;
     gap: 4px;
@@ -167,4 +172,249 @@ ul.rounded-tags li{
 /* Firefox */
 #pageInput {
   -moz-appearance: textfield;
+}
+
+/**/
+/* Basic styling for dropdown */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #f6f7f8;
+    border: 1px solid #f6f7f8;
+    border-radius: 8px;
+    height: 40px;
+    padding: 0 8px 0 12px;
+    font-family: "Inter v8 latin 500", sans-serif;
+    font-weight: 500;
+    line-height: 34px;
+    transition: all .2s;
+}
+
+/* Pasirinktų elementų skaičiaus stilius */
+.selected-count {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 8px;
+    color: #003D2B;
+}
+
+.dropdown-icon {
+    margin-left: auto;
+    width: 20px
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 900;
+
+    background-color: #fff;
+    border: 1px solid #1b1f2114;
+    border-radius: 8px;
+    width: 320px;
+    margin-top: 4px;
+    padding: 4px;
+}
+#filter_category_form{
+    max-height: 300px;
+    overflow-y: auto;
+}
+#ntis-map__filter-input{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #E3E8EF;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+/* Show the dropdown when it's active */
+.dropdown.active .dropdown-menu {
+    display: block !important;
+}
+#filter_category_form ul{
+    list-style-type:none;
+    margin-top: 0;
+}
+ul.treeview {
+    padding-left: 0;
+}
+ul.treeview ul {
+    padding-left: 0;
+    margin-left: 12px;
+}
+/* Slapto checkboxo stilius */
+.filter-checkbox {
+    display: none;
+}
+/* Label stilius */
+.filter-label {
+    margin-bottom: 2px;
+    font-size: 14px;
+    color: #121926;
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 6px;
+    min-height: 30px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative
+}
+
+/* Kai checkbox yra pažymėtas, keičiamas visas blokas */
+.filter-label:has(.filter-checkbox:checked) {
+    background-color: #3363611F;
+}
+
+.filter-label:hover {
+    background-color: #F1F5F9;
+}
+
+/* Išvaizda prieš pažymint checkboxą */
+.filter-label::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    background: #E3E8EF;
+    border-radius: 4px;
+    margin-right: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.filter-label:has(.filter-checkbox:checked):before {
+    background-color: #fff;
+    border-color: #fff;
+}
+
+.filter-label:has(.filter-checkbox:checked):after {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: auto;
+    bottom: auto;
+    transform: rotate(45deg);
+    height: 10px;
+    width: 4px;
+    margin-bottom: 2px;
+    border-bottom: 2px solid #003D2B;
+    border-right: 2px solid #003D2B;
+}
+#ntis-map__filter-clear-filters,
+#ntis-map__filter-clear-input{
+    display: none;
+}
+.ntis-map__filter_input_wrapper{
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+button#ntis-map__filter-clear-input {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    cursor:pointer;
+}
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 260px;
+}
+.search-icon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #121926;
+}
+.search-field {
+    width: 100%;
+    padding: 12px 12px 12px 32px;
+    border: 0;
+    border-radius: 8px;
+    height: 40px;
+    font-size: 14px;
+    background-color: #F8FAFC;
+    box-sizing: border-box;
+}
+.delete-ico path{
+stroke:var(--e-global-color-text);
+}
+#ntis-map-filters{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+.custom-checkbox {
+    display: none;
+}
+.checkbox-container {
+    border-radius: 8px;
+    overflow: hidden;
+}
+.custom-label {
+    color: #121926;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background-color: #F8FAFC;
+    height: 40px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+}
+.custom-label::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: #E3E8EF;
+    border-radius: 4px;
+    margin-right: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.custom-checkbox:checked+.custom-label::after {
+    content: "";
+    position: absolute;
+    left: 19px;
+    top: 14px;
+    transform: rotate(45deg);
+    height: 10px;
+    width: 4px;
+    border-bottom: 2px solid #003D2B;
+    border-right: 2px solid #003D2B;
+}
+#ntis-map__filter-clear-filters {
+    border: 0;
+    padding: 12px;
+    border-radius: 8px;
+    height: 40px;
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #1b1f2114;
+    box-sizing: border-box;
+    cursor: pointer;
+    display:none;
+    gap:6px;
+}
+#ntis-map__filter-clear-filters.active{
+    display:flex;
 }

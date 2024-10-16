@@ -130,7 +130,7 @@ class NTIS_Tourism_Resources
                 $html .= self::loop_pagination($paged, ceil($response_data['total'] / $page_size), $params);
                 wp_send_json_success(['html' => $html, 'total' => $response_data['total']]);
             } else {
-                wp_send_json_success(['html' => __('Pagal pateiktus filtro kriterijus paieška rezultatų negrąžino.', 'ntis')]);
+                wp_send_json_success(['html' => __('Pagal pateiktus filtro kriterijus paieška rezultatų negrąžino.', 'ntis') ,'total' => 0]);
             }
         } else {
             wp_send_json_error(['message' => __('Nepavyko gauti duomenų iš serverio.', 'ntis')]);
@@ -276,14 +276,14 @@ class NTIS_Tourism_Resources
             // Check if the current checkbox should be checked
             $isChecked = $depth == 0 ? (in_array($item['id'], $filter_categories ?? []) ? 'checked' : '') : (in_array($item['id'], $filter_subcategories ?? []) ? 'checked' : '');
 
-            //$isChild = $depth == 0 ? ' category' : ' subcategory';
+
             if ($iteration > 4) {
                 $showed = true;
                 $more_options = ' class="more-options"';
             } else {
                 $more_options = '';
             }
-            $html .= '<li'.$more_options.'><label for="' . $checkboxId . '" class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="' . $checkboxId . '" '
+            $html .= '<li'.$more_options.'><label class="nested-checkbox filter-label" for="' . $checkboxId . '" class="nested-checkbox"><input type="checkbox" name="filter[category][]" id="' . $checkboxId . '" class="filter-checkbox"'
                    . $isChecked . ' value="' . $item['id'].'"><span>'. $name . '</span></label>';
 
             if (isset($item['children']) && is_array($item['children'])) {
@@ -298,7 +298,6 @@ class NTIS_Tourism_Resources
         $html .= '</ul>';
         return $html;
     }
-
 
 }
 new NTIS_Tourism_Resources();

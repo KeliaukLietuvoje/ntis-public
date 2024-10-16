@@ -149,13 +149,8 @@ header("Feature-Policy: geolocation 'self'; midi 'none'; sync-xhr 'none'; accele
 header('Cross-Origin-Embedder-Policy: unsafe-none; report-to="default"');
 header('Cross-Origin-Resource-Policy: cross-origin');
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-    header("Content-Security-Policy: default-src * https: blob: data:; 
-    script-src 'self' https: 'unsafe-inline' 'unsafe-eval' consent.cookiebot.com; 
-    style-src 'self' https: 'unsafe-inline'; 
-    frame-src 'self' consentcdn.cookiebot.com consent.cookiebot.com *.ntis.lt *.userway.org userway.org blob: www.youtube.com; 
-    worker-src 'self' blob:;");
+    header("Content-Security-Policy: default-src * https: blob: data:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval' consent.cookiebot.com;  style-src 'self' https: 'unsafe-inline'; frame-src 'self' consentcdn.cookiebot.com consent.cookiebot.com *.ntis.lt *.userway.org userway.org blob: www.youtube.com; worker-src 'self' blob:;");
 }
-
 
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 if ($origin == env('WP_HOME')) {

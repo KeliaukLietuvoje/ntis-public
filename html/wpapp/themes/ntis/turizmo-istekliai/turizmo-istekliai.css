@@ -119,6 +119,7 @@ h1 {
   margin-left: 1rem;
   padding-left: 0;
   grid-column: 1 / span2;
+  display:grid;
 }
 
 .filter-content input[type="text"] {

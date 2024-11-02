@@ -205,7 +205,9 @@ ul.rounded-tags li{
     margin: 0 8px;
     color: #003D2B;
 }
-
+.dropdown{
+    font-size:14px;
+}
 .dropdown-icon {
     margin-left: auto;
     width: 20px
@@ -225,10 +227,12 @@ ul.rounded-tags li{
     margin-top: 4px;
     padding: 4px;
 }
+#filter_tenant_form,
 #filter_category_form{
     max-height: 300px;
     overflow-y: auto;
 }
+#ntis-map__filter_tenant-input,
 #ntis-map__filter-input{
     width: 100%;
     padding: 8px;
@@ -240,6 +244,7 @@ ul.rounded-tags li{
 .dropdown.active .dropdown-menu {
     display: block !important;
 }
+#filter_tenant_form ul,
 #filter_category_form ul{
     list-style-type:none;
     margin-top: 0;
@@ -311,6 +316,7 @@ ul.treeview ul {
     border-bottom: 2px solid #003D2B;
     border-right: 2px solid #003D2B;
 }
+#ntis-map__filter_tenant-clear-input,
 #ntis-map__filter-clear-filters,
 #ntis-map__filter-clear-input{
     display: none;
@@ -320,6 +326,7 @@ ul.treeview ul {
     gap: 8px;
     margin-bottom: 8px;
 }
+button#ntis-map__filter_tenant-clear-input,
 button#ntis-map__filter-clear-input {
     border: 0;
     background: transparent;

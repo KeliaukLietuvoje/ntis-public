@@ -60,6 +60,7 @@ try {
                 $title = ($current_lang == 'lt') ? $item['nameLt'] : $item['nameEn'];
                 $desc = ($current_lang == 'lt') ? $item['descriptionLt'] : $item['descriptionEn'];
                 $url = ($current_lang == 'lt') ? $item['urlLt'] : $item['urlEn'];
+          
                 $url = NTIS_Tourism_Resources::fix_url($url);
 
                 if (!empty($item['photos'])) {
@@ -343,6 +344,7 @@ try {
             $filter_category = isset($_REQUEST['filter']['category']) ? $_REQUEST['filter']['category'] : [];
             $filter_subcategory = isset($_REQUEST['filter']['subcategory']) ? $_REQUEST['filter']['subcategory'] : [];
             $filter_additional = isset($_REQUEST['filter']['additional']) ? $_REQUEST['filter']['additional'] : [];
+            $filter_tenant = isset($_REQUEST['filter']['tenant']) ? $_REQUEST['filter']['tenant'] : [];
 
             if (!empty($filter_title)) {
 
@@ -370,15 +372,17 @@ try {
             if (!empty($filter_additional)) {
                 $params['query[additionalInfos][id][$in]'] = $filter_additional;
             }
-
+            if (!empty($filter_tenant)) {
+                $params['query[tenant][id][$in]'] = $filter_tenant;
+            }
         } else {
             $filter_title = '';
-            $filter_price = $filter_additional = $filter_subcategory = $filter_category = [];
+            $filter_price = $filter_additional = $filter_subcategory = $filter_category = $filter_tenant =[];
         }
 
         $query_string = http_build_query($params);
         $rest_url = $rest_url . '?' . $query_string;
-
+        
         $response = wp_remote_get(
             $rest_url,
             [
@@ -456,6 +460,21 @@ try {
                                     id="filter-additional-<?php echo $additionalInfo['id'];?>" value="<?php echo $additionalInfo['id'];?>"
                                     <?php checked(in_array($v, $filter_additional ?? []), true, true);?>><span
                                     ><?php echo $v;?></span></label>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <?php } ?>
+                    <?php $tenants = NTIS_Tourism_Resources::fetch_endpoint('/public/tenants');?>
+                    <?php if (!empty($tenants)) {?>
+                    <div class="tic-place__filter filter-wrapper">
+                        <div class="filter-title">
+                            <span><?php _e('Turizmo informacijos centras', 'ntis');?></span>
+                            <button type="button" class="filter-toggle" aria-expanded="true"><span class="ico-expanded"></span></button>
+                        </div>
+                        <div class="filter-content">
+                            <?php echo NTIS_Tourism_Resources::generate_tenants($filter_tenant, $tenants);?>
+                            <?php if (count($tenants) > 4) { ?>
+                                <button type="button" class="show-more"><?php _e('+ Rodyti daugiau', 'ntis');?></button>
                             <?php } ?>
                         </div>
                     </div>

@@ -23,9 +23,8 @@
         updateSelectedCount: function(dropdown) {
             let selectedCount = dropdown.find('input[type="checkbox"]:checked').length;
             dropdown.find('.selected-count').text(selectedCount > 0 ? `+${selectedCount}` : '');
-
-            if (selectedCount > 0) {
-                ntis_map.show_clear_filter_btn();
+            if(selectedCount > 0) {
+                $('#ntis-map__filter-clear-filters').addClass('active');
             }
         },
         checkboxChanged:function() {
@@ -64,8 +63,8 @@
                 ntis_map.checkSiblings(parent, checked);
             }
         },
-        filterCheckboxes: function(filterValue) {
-            $('.treeview li').each(function() {
+        filterCheckboxes: function($t, filterValue) {
+            $($t).parents('.dropdown').find('.treeview li').each(function() {
                 var $this = $(this);
                 var labelText = $this.find('label span').text().toLowerCase();
                 
@@ -88,9 +87,20 @@
                 ntis_map.updateSelectedCount(dropdown);
                 $('#ntis-map-filters').trigger('submit');
             });
+            $('#ntis-map__filter_tenant-input').on('keyup', function() {
+                var filterValue = $(this).val().toLowerCase(); 
+                ntis_map.filterCheckboxes(this,filterValue);
+
+                if (filterValue.length > 0) {
+                    $('#ntis-map__filter_tenant-clear-input').show();
+                }else {
+                    $('#ntis-map__filter_tenant-clear-input').hide();
+                }
+            });
+
             $('#ntis-map__filter-input').on('keyup', function() {
                 var filterValue = $(this).val().toLowerCase(); 
-                ntis_map.filterCheckboxes(filterValue);
+                ntis_map.filterCheckboxes(this,filterValue);
 
                 if (filterValue.length > 0) {
                     $('#ntis-map__filter-clear-input').show();
@@ -98,16 +108,29 @@
                     $('#ntis-map__filter-clear-input').hide();
                 }
             });
+            $('#ntis-map__filter_tenant-clear-input').on('click', function() {
+                $('#ntis-map__filter_tenant-input').val('');
+                $(this).parents('.dropdown').find('input[type="checkbox"]').prop('checked', false);
+                ntis_map.filterCheckboxes(this,'');
+                $(this).removeClass('active');
+                let dropdown = $(this).parents('.dropdown');
+                ntis_map.updateSelectedCount(dropdown);
+                $('#ntis-map-filters').trigger('submit');
+            });
             $('#ntis-map__filter-clear-input').on('click', function() {
                 $('#ntis-map__filter-input').val('');
-                ntis_map.filterCheckboxes('');
+                $(this).parents('.dropdown').find('input[type="checkbox"]').prop('checked', false);
+                ntis_map.filterCheckboxes(this,'');
                 $(this).removeClass('active');
+                let dropdown = $(this).parents('.dropdown');
+                ntis_map.updateSelectedCount(dropdown);
+                $('#ntis-map-filters').trigger('submit');
             });
             $('#ntis-map__filter-clear-filters').on('click', function() {
                 $('#ntis-map-filters input[type="checkbox"]').prop('checked', false);
                 $('#filter_category_form label').removeClass('custom-checked custom-unchecked custom-indeterminate');
                 $('.treeview li').show();
-                $('#filter_title').val('');
+                $('#ntis-map__filter-input,#filter_title,#ntis-map__filter_tenant-input').val('');
                 $('#ntis-map-filters .dropdown').each(function() {
                     let dropdown = $(this).closest('.dropdown');
                     ntis_map.updateSelectedCount(dropdown);
@@ -136,7 +159,6 @@
 
             $('#ntis-map-filters').on('submit', async function(e) {
                 e.preventDefault();
-                console.log('submit');
             
                 // Prepare the query object
                 const queryObject = {
@@ -144,6 +166,7 @@
                     nameLt: { $ilike: [] },
                     nameEn: { $ilike: [] },
                     categories: { id: { $in: [] } },
+                    tenant: { id: { $in: [] } },
                     additionalInfos: { id: { $in: [] } },
                 };
             
@@ -172,6 +195,16 @@
                 if (queryObject.categories.id.$in.length === 0) {
                     delete queryObject.categories;
                 }
+
+                // Process tenants filters
+                $('#filter_tenant_form input[type="checkbox"]').each(function() {
+                    if ($(this).prop('checked')) {
+                        queryObject.tenant.id.$in.push(parseInt($(this).val()));
+                    }
+                });
+                if (queryObject.tenant.id.$in.length === 0) {
+                    delete queryObject.tenant;
+                }
             
                 // Process price filters
                 $('#filter_price_form input[type="checkbox"]').each(function() {
@@ -193,6 +226,9 @@
                     delete queryObject.additionalInfos;
                 }
             
+                if(Object.keys(queryObject).length === 0) {
+                    $('#ntis-map__filter-clear-filters').removeClass('active');
+                }
                 // Create the query string for the tiles URL
                 const query = encodeURIComponent(JSON.stringify(queryObject));
                 const tiles_url = `${ntis_map_config.api.url}/tiles/objects/{z}/{x}/{y}/?query=${query}`;

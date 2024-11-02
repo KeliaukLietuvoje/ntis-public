@@ -34,6 +34,7 @@ class NTIS_Tourism_Resources
         $filter_price = $filters['price'] ?? [];
         $filter_category = $filters['category'] ?? [];
         $filter_additional = $filters['additional'] ?? [];
+        $filter_tenant = $filters['tenant'] ?? [];
 
         // Title filter
         if (!empty($filter_title)) {
@@ -54,6 +55,10 @@ class NTIS_Tourism_Resources
         // Additional filter
         if (!empty($filter_additional)) {
             $params['query[additionalInfos][id][$in]'] = $filter_additional;
+        }
+
+        if (!empty($filter_tenant)) {
+            $params['query[tenant][id][$in]'] = $filter_tenant;
         }
 
         // Build REST API URL with query string
@@ -154,6 +159,9 @@ class NTIS_Tourism_Resources
     }
     public static function fix_url($url)
     {
+        if(empty($url)) {
+            return '';
+        }
         if (!preg_match("/^https?:\/\//", $url)) {
             $url = "https://" . $url;
         }
@@ -263,7 +271,7 @@ class NTIS_Tourism_Resources
 
     public static function generate_tree_category($current_lang, $filter_categories, $filter_subcategories, $items, $depth = 0)
     {
-        global $iteration;
+        global $category_iteration;
         $html = '<ul' . ($depth === 0 ? ' class="treeview"' : '') . '>';
         $index = 0;
 
@@ -271,13 +279,13 @@ class NTIS_Tourism_Resources
             $name = $current_lang === 'lt' ? $item['name'] : $item['nameEn'];
             $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
 
-            $checkboxId = 'checkbox-' . $item['id'];
+            $checkboxId = 'category-checkbox-' . $item['id'];
 
             // Check if the current checkbox should be checked
             $isChecked = $depth == 0 ? (in_array($item['id'], $filter_categories ?? []) ? 'checked' : '') : (in_array($item['id'], $filter_subcategories ?? []) ? 'checked' : '');
 
 
-            if ($iteration > 4) {
+            if ($category_iteration > 4) {
                 $showed = true;
                 $more_options = ' class="more-options"';
             } else {
@@ -293,7 +301,37 @@ class NTIS_Tourism_Resources
             $html .= '</li>';
 
             $index++;
-            $iteration++;
+            $category_iteration++;
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+    public static function generate_tenants($filter_tenant, $items)
+    {
+        global $tenants_iteration;
+        $html = '<ul class="treeview">';
+        $index = 0;
+
+        foreach ($items as $item) {
+            $name = !empty($item['name'])?htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'):'';
+
+            $checkboxId = 'tenant-checkbox-' . $item['id'];
+
+            $isChecked = in_array($item['id'], $filter_tenant ?? []) ? 'checked' : '';
+
+            if ($tenants_iteration > 4) {
+                $showed = true;
+                $more_options = ' class="more-options"';
+            } else {
+                $more_options = '';
+            }
+            $html .= '<li'.$more_options.'><label class="nested-checkbox filter-label" for="' . $checkboxId . '" class="nested-checkbox"><input type="checkbox" name="filter[tenant][]" id="' . $checkboxId . '" class="filter-checkbox"'
+                   . $isChecked . ' value="' . $item['id'].'"><span>'. $name . '</span></label>';
+
+            $html .= '</li>';
+
+            $index++;
+            $tenants_iteration++;
         }
         $html .= '</ul>';
         return $html;

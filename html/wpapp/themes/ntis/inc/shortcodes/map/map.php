@@ -56,7 +56,7 @@ class NTIS_Map
         ));
 
         $filter = '';
-        $filter_category = $filter_subcategory = [];
+        $filter_category = $filter_subcategory = $filter_tenant =[];
         if ($atts['filter_enabled']) {
             $categories = NTIS_Tourism_Resources::fetch_endpoint('/categories/enum');
             $filter.='
@@ -68,7 +68,7 @@ class NTIS_Map
   </div>
                 ';
             if(!empty($categories)){
-             $filter.='<div class="dropdown">
+             $filter.='<div class="dropdown categories">
                         <div class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">
                         <div id="filter_category" class="filter-dropdown-toogle">'.__('Kategorija', 'ntis').'</div>
                         <span class="selected-count"></span>
@@ -82,7 +82,7 @@ class NTIS_Map
                         </nav>
                     </div>';
             }
-                    $filter.='<div class="dropdown">
+                    $filter.='<div class="dropdown price">
                         <div class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">
                         <div id="filter_price" class="filter-dropdown-toogle">'.__('Kaina', 'ntis').'</div>
                         <span class="selected-count"></span>
@@ -99,7 +99,7 @@ class NTIS_Map
 
                 $additionalInfos = NTIS_Tourism_Resources::fetch_endpoint('/additionalInfos/enum');
                 if(!empty($additionalInfos)){
-                    $filter.='<div class="dropdown">
+                    $filter.='<div class="dropdown additionalinfos">
                         <div class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">
                         <div id="filter_additionalinfo" class="filter-dropdown-toogle">'.__('Papildoma informacija', 'ntis').'</div>
                         <span class="selected-count"></span>
@@ -115,6 +115,23 @@ class NTIS_Map
                             $filter.='</div>
                         </nav>
                     </div>';
+                }
+
+                $tenants = NTIS_Tourism_Resources::fetch_endpoint('/public/tenants');
+                if(!empty($tenants)){
+                $filter.='<div class="dropdown tenants">
+                            <div class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">
+                            <div id="filter_tenant" class="filter-dropdown-toogle">'.__('Turizmo informacijos centras', 'ntis').'</div>
+                            <span class="selected-count"></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down dropdown-icon"><path d="m6 9 6 6 6-6"/></svg>
+                            </div>
+                            <nav class="dropdown-menu" aria-labelledby="dropdownToggle" style="display:none;">
+                                <div class="ntis-map__filter_input_wrapper"><input type="text" id="ntis-map__filter_tenant-input" placeholder="'.__('Ieškoti', 'ntis').'"> <button type="button" id="ntis-map__filter_tenant-clear-input"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="delete-ico"><path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="m12 9 6 6"/><path d="m18 9-6 6"/></svg></button></div>
+                                <div id="filter_tenant_form" method="get">
+                                    '.NTIS_Tourism_Resources::generate_tenants($filter_tenant, $tenants).'
+                                </div>
+                            </nav>
+                        </div>';
                 }
                     $filter.='<button type="button" id="ntis-map__filter-clear-filters"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> '.__('Valyti filtrus','ntis').'</button>
                 </form>';

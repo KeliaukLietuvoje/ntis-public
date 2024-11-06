@@ -60,7 +60,7 @@ try {
                 $title = ($current_lang == 'lt') ? $item['nameLt'] : $item['nameEn'];
                 $desc = ($current_lang == 'lt') ? $item['descriptionLt'] : $item['descriptionEn'];
                 $url = ($current_lang == 'lt') ? $item['urlLt'] : $item['urlEn'];
-          
+
                 $url = NTIS_Tourism_Resources::fix_url($url);
 
                 if (!empty($item['photos'])) {
@@ -377,12 +377,12 @@ try {
             }
         } else {
             $filter_title = '';
-            $filter_price = $filter_additional = $filter_subcategory = $filter_category = $filter_tenant =[];
+            $filter_price = $filter_additional = $filter_subcategory = $filter_category = $filter_tenant = [];
         }
 
         $query_string = http_build_query($params);
         $rest_url = $rest_url . '?' . $query_string;
-        
+
         $response = wp_remote_get(
             $rest_url,
             [
@@ -484,7 +484,7 @@ try {
 
             <div class="tic-place__column">
                 <div class="tic-place__options">
-                    <div><button type="button" class="btn__filters--toggle"><?php _e('Slėpti filtrus', 'ntis');?></button> Rasta objektų : <span class="tic-total"><?php echo $response['total'];?></span></div>
+                    <div><button type="button" class="btn__filters--toggle"><?php _e('Slėpti filtrus', 'ntis');?></button> <?php _e('Rasta objektų', 'nits');?> : <span class="tic-total"><?php echo $response['total'];?></span></div>
                     <div class="view-options">
                         <button class="icon icon-list active">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"

@@ -38,7 +38,7 @@ function remove_script_version($src)
 
 function cleanup_remove_dashicons()
 {
-    if(!is_user_logged_in()) {
+    if (!is_user_logged_in()) {
         wp_dequeue_style('dashicons');
         wp_deregister_style('dashicons');
     }

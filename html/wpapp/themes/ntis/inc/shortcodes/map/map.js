@@ -304,7 +304,7 @@
             if (!mapContainer || !maplibregl) return;
             const map = new maplibregl.Map({
                 container: 'ntis-map',
-                style: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
+                style: 'https://basemap.biip.lt/styles/bright/style.json',
                 center: ntis_map_config.coordinates,
                 zoom: ntis_map_config.zoom,
                 attributionControl: false

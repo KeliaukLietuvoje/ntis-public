@@ -10,7 +10,7 @@
             const lng = parseFloat(mapElement.getAttribute('data-lng'));
             const map = new maplibregl.Map({
                 container: 'tic-place__map',
-                style: 'https://basemap.startupgov.lt/vector/styles/bright/style.json',
+                style: 'https://basemap.biip.lt/styles/bright/style.json',
                 center: [lng, lat],
                 zoom: objVars.map.zoom,
                 attributionControl: false
